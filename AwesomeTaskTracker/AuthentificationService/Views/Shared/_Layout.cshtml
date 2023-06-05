@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -19,12 +21,21 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
+
+                    <div>
+                        @if (@User.Identity!.IsAuthenticated)
+                        {
+                            <div>@User.Identity.Name</div>
+                            <form method="post" asp-controller="Account" aspcontroller="Logout">
+                                <input type="submit" value="Выйти"/>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login">Войти</a>
+                            <a asp-controller="Account" asp-action="Register">Зарегистрировать нового попуга</a>
+                        }
+                    </div>
                 </ul>
             </div>
         </div>
@@ -38,7 +49,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2023 - AuthentificationService - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2023 - AuthentificationService
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

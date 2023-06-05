@@ -1,0 +1,31 @@
+@model AuthentificationService.ViewModels.RegisterViewModel
+<h2>Регистрация нового попуга</h2>
+
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Email"></label><br/>
+        <input asp-for="Email"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="BeakShape"></label><br/>
+        <input asp-for="BeakShape"/>
+        <span asp-validation-for="BeakShape"></span>
+    </div>
+    <div>
+        <label asp-for="BeakShapeConfirm"></label><br/>
+        <input asp-for="BeakShapeConfirm"/>
+        <span asp-validation-for="BeakShapeConfirm"></span>
+    </div>
+    <div>
+        <label asp-for="Roles"></label><br/>
+        <select style="width: auto" asp-for="@Model.SelectedRole.Value" asp-items="@Model.Roles" class="form-control">
+            <option selected>@Model.SelectedRole.Value</option>
+        </select>
+    </div>
+    <label></label>
+    <div>
+        <input type="submit" value="Register"/>
+    </div>
+</form>
