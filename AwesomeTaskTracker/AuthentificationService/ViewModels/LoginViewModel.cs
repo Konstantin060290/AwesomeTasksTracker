@@ -6,12 +6,12 @@ public class LoginViewModel
 {
     [Required]
     [Display(Name = "Email")]
-    public string? Email { get; set; }
+    public string Email { get; set; } = "";
 
     [Required]
     [DataType(DataType.Password)]
     [Display(Name = "Форма клюва")]
-    public string? BeakShape { get; set; }
+    public string BeakShape { get; set; }= "";
     
     [Display(Name ="Запомнить меня")] 
     public bool RememberMe { get; set; } 

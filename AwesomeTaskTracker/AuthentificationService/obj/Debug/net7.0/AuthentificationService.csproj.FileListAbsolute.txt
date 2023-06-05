@@ -76,11 +76,3 @@ C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debu
 C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\obj\Debug\net7.0\AuthentificationService.csproj.CopyComplete
 C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Npgsql.dll
 C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Microsoft.AspNet.Identity.Core.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Microsoft.AspNet.Identity.Owin.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Microsoft.Owin.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Microsoft.Owin.Security.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Microsoft.Owin.Security.Cookies.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Microsoft.Owin.Security.OAuth.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Newtonsoft.Json.dll
-C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\AuthentificationService\bin\Debug\net7.0\Owin.dll

@@ -3,28 +3,25 @@
 @{
     ViewBag.Title = "Login";
 }
-<h2>Login</h2>
+<h2>Аутентификация попуга</h2>
 
-<form method = "post" asp-controller = "Account" asp-action = "Login" 
-   asp-route-returnurl = "@Model.ReturnUrl">
+<form method="post" asp-controller="Account" asp-action="Login"
+      asp-route-returnurl="@Model.ReturnUrl">
 
-    <div>
+    <div style="margin: 10px">
         <label asp-for="Email"></label>
         <input asp-for="Email"/>
         <span asp-validation-for="Email"></span>
     </div>
-
-    <div>
+    <div style="margin: 10px">
         <label asp-for="BeakShape"></label>
         <input asp-for="BeakShape"/>
         <span asp-validation-for="BeakShape"></span>
     </div>
-
-    <div>
+    <div style="margin: 10px">
         <label asp-for="RememberMe"></label>
         <input asp-for="RememberMe"/>
         <span asp-validation-for="RememberMe"></span>
     </div>
-
-    <input type="submit" value="Login"/>
+    <input style="margin: 10px" class="btn btn-primary mx-2" type="submit" value="Login"/>
 </form>

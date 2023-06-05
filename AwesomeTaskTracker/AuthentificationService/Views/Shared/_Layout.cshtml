@@ -26,14 +26,16 @@
                         @if (@User.Identity!.IsAuthenticated)
                         {
                             <div>@User.Identity.Name</div>
-                            <form method="post" asp-controller="Account" aspcontroller="Logout">
+                            <form method="post" asp-controller="Account" asp-action="Logout">
                                 <input type="submit" value="Выйти"/>
                             </form>
                         }
                         else
                         {
-                            <a asp-controller="Account" asp-action="Login">Войти</a>
-                            <a asp-controller="Account" asp-action="Register">Зарегистрировать нового попуга</a>
+                            <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="Login">Войти</a>
+                            <a></a>
+                            <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="Register">Зарегистрировать нового попуга</a>
+                            <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="EditRoles">Править роли</a>
                         }
                     </div>
                 </ul>

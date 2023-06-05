@@ -62,9 +62,6 @@ public class AccountController : Controller
             var result = await _userManager.CreateAsync(user, model.BeakShape);
             if (result.Succeeded)
             {
-                // установка куки
-                //await _signInManager.SignInAsync(user, false);
-
                 await SetNewUserRights(model);
 
                 return RedirectToAction("Index", "Home");
@@ -87,12 +84,13 @@ public class AccountController : Controller
         await _context.SaveChangesAsync();
     }
 
-    [HttpGet] 
-    public IActionResult Login(string returnUrl = "") { 
-        var model = new LoginViewModel { ReturnUrl = returnUrl }; 
-        return View(model); 
+    [HttpGet]
+    public IActionResult Login(string returnUrl = "")
+    {
+        var model = new LoginViewModel { ReturnUrl = returnUrl };
+        return View(model);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
@@ -115,10 +113,68 @@ public class AccountController : Controller
         ModelState.AddModelError("", "Invalid login attempt");
         return View(model);
     }
-    
-    [HttpPost] 
-    public async Task<IActionResult> Logout() { 
-        await _signInManager.SignOutAsync(); 
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
-    } 
+    }
+
+    [HttpGet]
+    public IActionResult EditRoles()
+    {
+        var roles = _context.Roles.ToList();
+
+        var roleViewModel = new RoleViewModel();
+
+        foreach (var role in roles)
+        {
+            var viewModel = new RoleViewModel
+            {
+                RoleName = role.Name!,
+                RoleId = role.Id
+            };
+
+            roleViewModel.ViewModels?.Add(viewModel);
+        }
+
+        return View(roleViewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddNewRole(RoleViewModel roleViewModel)
+    {
+        var maxId = _context.Roles.ToList().Select(r => r.Id).Max();
+        var role = new Role
+        {
+            Id = maxId + 1,
+            Name = roleViewModel.RoleName,
+            NormalizedName = roleViewModel.RoleName,
+            ConcurrencyStamp = roleViewModel.RoleName
+        };
+        await _context.Roles.AddAsync(role);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("EditRoles", "Account");
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> EditRole(RoleViewModel model, int id)
+    {
+        var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
+        role!.Name = model.RoleName;
+        await _context.SaveChangesAsync();
+        return RedirectToAction("EditRoles", "Account");
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> DeleteRole(int id)
+    {
+        var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
+        _context.Roles.Remove(role!);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("EditRoles", "Account");
+    }
 }

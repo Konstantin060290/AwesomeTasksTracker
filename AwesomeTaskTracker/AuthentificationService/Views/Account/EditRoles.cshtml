@@ -1,0 +1,73 @@
+@using AuthentificationService.ViewModels
+@model RoleViewModel
+
+@{
+    ViewBag.Title = "Add new Role";
+}
+<h2>Добавить новую роль попуга</h2>
+
+
+<div class="container p-3">
+    <form method="post" asp-action="AddNewRole" asp-controller="Account" enctype="multipart/form-data">
+        <div class="row p-4">
+            <div class="col-8">
+                <label style="width: auto; margin: 5px">Наименование роли</label>
+                @{
+                    <input style="width: auto" asp-for="@Model.RoleName" class="form-control"/>
+                }
+                <input style="width: auto; margin: 5px" type="submit" value="Добавить роль" class="btn btn-primary mx-2"/>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <br/>
+
+    @if (Model.ViewModels!.Any())
+    {
+        var roleViewModel = new RoleViewModel();
+        <table class="table table-bordered table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>
+                    <label class="align-middle" asp-for="@roleViewModel.RoleId"></label>
+                </th>
+                <th>
+                    <label class="align-middle" asp-for="@roleViewModel.RoleName"></label>
+                </th>
+                <th>
+                    <label>Редактировать/удалить</label>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var obj in Model.ViewModels!)
+            {
+                <tr>
+                    <td class="w-10">@obj.RoleId</td>
+                    <td class="w-20">@obj.RoleName</td>
+                    <td class="w-20">
+                        <div role="group">
+                            <form method="post" asp-route-id="@obj.RoleId" asp-action="EditRole" asp-controller="Account" enctype="multipart/form-data">
+                                <div class="col-8">
+                                    <label style="width: auto; margin: 5px">Новое наименование роли</label>
+                                    @{
+                                        <input style="width: auto" asp-for="@Model.RoleName" class="form-control"/>
+                                    }
+                                    <input style="margin: 5px" class="btn btn-primary mx-2 w-50" type="submit" value="Переименовать роль"/>
+                                </div>
+                            </form>
+                            <form method="post" asp-route-id="@obj.RoleId" asp-action="DeleteRole" asp-controller="Account" enctype="multipart/form-data">
+                                <input style="margin: 5px" class="btn btn-danger mx-2 w-50" value="Delete Role" type="submit"/>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Нет добавленных ролей</p>
+    }
+</div>
