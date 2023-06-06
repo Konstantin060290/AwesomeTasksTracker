@@ -10,7 +10,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationContext>(o=>o
     .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 builder.Services.AddIdentity<User, Role>(opts=> {
         opts.Password.RequiredLength = 1;   // минимальная длина
         opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
@@ -20,7 +19,14 @@ builder.Services.AddIdentity<User, Role>(opts=> {
     })
     .AddEntityFrameworkStores<ApplicationContext>();
 
+
 var app = builder.Build();
+
+var scope = app.Services.CreateScope();
+
+var roleManager = scope.ServiceProvider.GetService<RoleManager<Role>>();
+var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
+AdminRoleStartInitializer.AdminStartInitialize(userManager!, roleManager!);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

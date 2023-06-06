@@ -22,6 +22,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Register()
     {
         var roles = _context.Roles;
@@ -85,6 +86,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login(string returnUrl = "")
     {
         var model = new LoginViewModel { ReturnUrl = returnUrl };
@@ -92,6 +94,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (ModelState.IsValid)
@@ -115,6 +118,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
@@ -122,6 +126,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
     public IActionResult EditRoles()
     {
         var roles = _context.Roles.ToList();
@@ -143,6 +148,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
     public async Task<IActionResult> AddNewRole(RoleViewModel roleViewModel)
     {
         var maxId = _context.Roles.ToList().Select(r => r.Id).Max();
@@ -161,6 +167,7 @@ public class AccountController : Controller
 
 
     [HttpPost]
+    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
     public async Task<IActionResult> EditRole(RoleViewModel model, int id)
     {
         var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
@@ -170,6 +177,7 @@ public class AccountController : Controller
     }
     
     [HttpPost]
+    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
     public async Task<IActionResult> DeleteRole(int id)
     {
         var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
