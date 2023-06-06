@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "yrFUXibYEGt0fCtQux63TpgTzTwX9JIh/NaKEZ0qWiXpzcEghTqKXR8G1jw6T9oboypYKaCma4V1UoMn8+d6GA==",
+  "dgSpecHash": "z9h04B3zOtITFTDRvBAaNpgP38Cj66xfWcdwNgyNzOE79Af9tuSW1GKkcjOgfs1IOaZWv0DMtiM8WJkQZOkfew==",
   "success": true,
   "projectFilePath": "C:\\Repos\\AwesomeTasksTracker\\AwesomeTaskTracker\\AuthentificationService\\AuthentificationService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\confluent.kafka\\2.1.1\\confluent.kafka.2.1.1.nupkg.sha512",
+    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\librdkafka.redist\\2.1.1\\librdkafka.redist.2.1.1.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.5\\microsoft.aspnetcore.cryptography.internal.7.0.5.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\7.0.5\\microsoft.aspnetcore.cryptography.keyderivation.7.0.5.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\7.0.5\\microsoft.aspnetcore.identity.entityframeworkcore.7.0.5.nupkg.sha512",
