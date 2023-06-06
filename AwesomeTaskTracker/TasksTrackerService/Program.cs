@@ -1,3 +1,5 @@
+using TasksTrackerService.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,6 +21,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.Services.CreateScope();
+
+//builder.Services.AddScoped<IRegisterConsumer, RegisterConsumer>();
+var registerConsumer = new RegisterConsumer();
+registerConsumer.ConsumeRegisterUser();
 
 app.MapControllerRoute(
     name: "default",
