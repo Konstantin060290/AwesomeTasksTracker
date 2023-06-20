@@ -1,15 +1,27 @@
+using System.Text.Json;
+using AuthentificationService.WebConstants;
 using Confluent.Kafka;
+using TasksTrackerService.Context;
+using TasksTrackerService.Models;
 
 namespace TasksTrackerService.Service;
 
 public class RegisterConsumer : IRegisterConsumer
 {
+    private readonly ApplicationContext _context;
+
+    public RegisterConsumer(ApplicationContext context)
+    {
+        _context = context;
+        ConsumeRegisterUser();
+    }
+
     public void ConsumeRegisterUser()
     {
         Task.Run(Listen);
     }
 
-    private static void Listen()
+    private async void Listen()
     {
         var config = new ConsumerConfig
         {
@@ -32,10 +44,16 @@ public class RegisterConsumer : IRegisterConsumer
             {
                 try
                 {
+                    
                     var consumeResult = builder.Consume(cts.Token);
-
-                    Console.WriteLine(
-                        $"Consumed message '{consumeResult.Message.Value}' at: '{consumeResult.TopicPartitionOffset}'.");
+                    if (consumeResult.Message.Key == EventsNames.UserRegistered)
+                    {
+                        await AddNewUserToDb(consumeResult, cts);
+                    }
+                    if (consumeResult.Message.Key == EventsNames.UserChanged)
+                    {
+                        await ChangeUserInDb(consumeResult, cts);
+                    }
                 }
                 catch (ConsumeException e)
                 {
@@ -49,8 +67,32 @@ public class RegisterConsumer : IRegisterConsumer
             builder.Close();
         }
     }
+
+    private async Task AddNewUserToDb(ConsumeResult<string, string> consumeResult, CancellationTokenSource cts)
+    {
+        var user = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
+        _context.Users.Add(user!);
+        await _context.SaveChangesAsync(cts.Token);
+    }
+    private async Task ChangeUserInDb(ConsumeResult<string, string> consumeResult, CancellationTokenSource cts)
+    {
+        var changedUser = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
+        if (changedUser is null)
+        {
+            return;
+        }
+        var existedUser = _context.Users.FirstOrDefault(u=>u.UserId == changedUser.UserId);
+        if (existedUser is not null)
+        {
+            existedUser.UserName = changedUser.UserName;
+            existedUser.UserRoleName = changedUser.UserRoleName;
+            existedUser.Email = changedUser.Email;
+        }
+        await _context.SaveChangesAsync(cts.Token);
+    }
 }
 
 public interface IRegisterConsumer
 {
+    void ConsumeRegisterUser();
 }

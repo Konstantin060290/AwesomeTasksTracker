@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using TasksTrackerService.Context;
 using TasksTrackerService.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ApplicationContext>(o=>o
+    .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IRegisterConsumer, RegisterConsumer>();
 
 var app = builder.Build();
 
@@ -22,11 +29,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.Services.CreateScope();
+var scope = app.Services.CreateScope();
 
-//builder.Services.AddScoped<IRegisterConsumer, RegisterConsumer>();
-var registerConsumer = new RegisterConsumer();
-registerConsumer.ConsumeRegisterUser();
+scope.ServiceProvider.GetService<IRegisterConsumer>();
 
 app.MapControllerRoute(
     name: "default",
