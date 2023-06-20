@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using AuthentificationService.WebConstants
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -19,12 +21,29 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
+
+                    <div role="group">
+                        @if (@User.Identity!.IsAuthenticated)
+                        {
+                            <div class="col-3">@User.Identity.Name</div>
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <input type="submit" value="Выйти"/>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="Login">Войти</a>
+                            <a></a>
+                            <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="Register">Зарегистрироваться</a>
+                        }
+                    </div>
+
+                    @if (@User.IsInRole(WebConstants.AdminRole))
+                    {
+                        <div class="col-5">
+                            <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="EditRoles">Править роли</a>
+                        </div>
+                    }
                 </ul>
             </div>
         </div>
@@ -38,7 +57,7 @@
 
 <footer class="border-top footer text-muted">
     <div class="container">
-        &copy; 2023 - AuthentificationService - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        &copy; 2023 - AuthentificationService
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
