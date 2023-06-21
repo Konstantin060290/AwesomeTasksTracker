@@ -1,0 +1,62 @@
+@model AuthentificationService.ViewModels.ManageUsersViewModel;
+
+<h2>Назначить роли</h2>
+
+@if (Model.Users!.Any())
+{
+    <table name="MainTable" class="table table-bordered table table-striped" style="width:100%">
+        <thead>
+        <tr>
+            <th>
+                <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.UserId"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.UserName"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.UserEmail"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.RoleName"></label>
+            </th>
+            <th>
+                <label>Удалить попуга</label>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var obj in Model.Users)
+        {
+            <tr>
+                <td class="w-10">@obj.UserId</td>
+                <td class="w-10">@obj.UserName</td>
+                <td class="w-20">@obj.UserEmail</td>
+                <td class="w-20">@obj.RoleName</td>
+                <td class="w-10">
+                    <form method="post" asp-route-id="@obj.UserId" asp-action="RemoveUser" asp-controller="Account" enctype="multipart/form-data">
+                        <div class="row p-4">
+                            <div class="col-8">
+                                <input style="width: auto; margin: 5px" type="submit" value="Удалить попуга" class="btn btn-danger mx-2"/>
+                            </div>
+                        </div>
+                    </form>
+                    <form method="get" asp-route-id="@obj.UserId" asp-action="ChangeRole" asp-controller="Account" enctype="multipart/form-data">
+                        <div class="row p-4">
+                            <div class="col-8">
+                                <input style="width: auto; margin: 5px" type="submit" value="Править роль" class="btn btn-primary mx-2"/>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <div class="col-7">
+        <input style="margin: 5px" class="btn btn-primary" type="submit" value="Обновить роли"/>
+    </div>
+}
+else
+{
+    <p>Нет добавленных попугов</p>
+}

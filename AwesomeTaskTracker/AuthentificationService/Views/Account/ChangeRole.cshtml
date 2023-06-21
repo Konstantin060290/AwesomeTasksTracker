@@ -1,0 +1,30 @@
+@model AuthentificationService.ViewModels.UserViewModel
+
+<h2>Изменить роль попуга</h2>
+
+<form method="post" asp-route-id="@Model.UserId" asp-route-newRole="@Model.SelectedRoleString" asp-controller="Account" asp-action="ChangeRolePost">
+
+    <div style="margin: 10px">
+        <label asp-for="@Model.UserId"></label>
+        <label>@Model.UserId</label>
+    </div>
+    <div style="margin: 10px">
+        <label asp-for="@Model.UserName"></label>
+        <label>@Model.UserName</label>
+    </div>
+    <div style="margin: 10px">
+        <label asp-for="@Model.UserEmail"></label>
+        <label>@Model.UserEmail</label>
+    </div>
+    <div style="margin: 10px">
+        <label asp-for="@Model.RoleName"></label>
+        <label>@Model.RoleName</label>
+    </div>
+    <div style="margin: 10px">
+        <label asp-for="@Model.SelectedUserRole"></label><br/>
+        <select style="width: auto" asp-for="@Model.SelectedUserRole.Value" asp-items="@Model.Roles" class="form-control">
+            <option selected>--Выберите новую роль--</option>
+        </select>
+    </div>
+    <input style="margin: 10px" class="btn btn-primary mx-2" type="submit" value="Назначить роль"/>
+</form>

@@ -1,5 +1,4 @@
 ﻿@using AuthentificationService.WebConstants
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +22,7 @@
                 <ul class="navbar-nav flex-grow-1">
 
                     <div role="group">
-                        @if (@User.Identity!.IsAuthenticated)
+                        @if (User.Identity!.IsAuthenticated)
                         {
                             <div class="col-3">@User.Identity.Name</div>
                             <form method="post" asp-controller="Account" asp-action="Logout">
@@ -38,10 +37,11 @@
                         }
                     </div>
 
-                    @if (@User.IsInRole(WebConstants.AdminRole))
+                    @if (User.IsInRole(WebConstants.AdminRole))
                     {
-                        <div class="col-5">
+                        <div class="col-4" role="group">
                             <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="EditRoles">Править роли</a>
+                             <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="ManageUsers">Управление попугами</a>
                         </div>
                     }
                 </ul>
