@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthentificationService", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksTrackerService", "TasksTrackerService\TasksTrackerService.csproj", "{57A3C925-A659-437B-BD96-F79BB49ADB24}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AwesomeServicesShared", "AwesomeServicesShared\AwesomeServicesShared.shproj", "{C7763FA8-FC52-4EC5-A52F-FD678188FA72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

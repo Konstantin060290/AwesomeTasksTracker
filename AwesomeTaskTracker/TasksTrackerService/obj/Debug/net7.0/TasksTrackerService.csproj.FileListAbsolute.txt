@@ -64,3 +64,8 @@ C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\ne
 C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\runtimes\win-x86\native\vcruntime140.dll
 C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\runtimes\win-x86\native\zlib1.dll
 C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\runtimes\win-x86\native\zstd.dll
+C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
+C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\Npgsql.dll
+C:\Repos\AwesomeTasksTracker\AwesomeTaskTracker\TasksTrackerService\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
