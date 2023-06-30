@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "X8wlnbscanIiV+kJoAS+Ab0kxDaTPIlAEVVLPeSZdC70JYUkYDI5TkVqR0AIeGDVGeb2hXgy38vERjGK+hgANw==",
+  "dgSpecHash": "CcXiNOcbUgG5lSqLJtgjXj7I19Mq5Ycw/KtjJb/+rqp2Rv5M6GYPI3GtL7ME6NFKPES3c9M+cBShWDLqCmnxgw==",
   "success": true,
   "projectFilePath": "C:\\Repos\\AwesomeTasksTracker\\AwesomeTaskTracker\\TasksTrackerService\\TasksTrackerService.csproj",
   "expectedPackageFiles": [
@@ -9,9 +9,9 @@
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\librdkafka.redist\\2.1.1\\librdkafka.redist.2.1.1.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\lz4net\\1.0.15.93\\lz4net.1.0.15.93.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\lz4net.unsafe.netcore\\1.0.15.93\\lz4net.unsafe.netcore.1.0.15.93.nupkg.sha512",
-    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.5\\microsoft.entityframeworkcore.7.0.5.nupkg.sha512",
-    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.5\\microsoft.entityframeworkcore.abstractions.7.0.5.nupkg.sha512",
-    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.5\\microsoft.entityframeworkcore.analyzers.7.0.5.nupkg.sha512",
+    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.8\\microsoft.entityframeworkcore.7.0.8.nupkg.sha512",
+    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.8\\microsoft.entityframeworkcore.abstractions.7.0.8.nupkg.sha512",
+    "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.8\\microsoft.entityframeworkcore.analyzers.7.0.8.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.5\\microsoft.entityframeworkcore.relational.7.0.5.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\konstantin.filyurin\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
