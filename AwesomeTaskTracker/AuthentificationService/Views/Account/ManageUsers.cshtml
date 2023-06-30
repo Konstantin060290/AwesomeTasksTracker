@@ -17,7 +17,7 @@
                 <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.UserEmail"></label>
             </th>
             <th>
-                <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.RoleName"></label>
+                <label class="align-middle" asp-for="@Model.Users.FirstOrDefault()!.CurrentRoleName"></label>
             </th>
             <th>
                 <label>Удалить попуга</label>
@@ -31,7 +31,7 @@
                 <td class="w-10">@obj.UserId</td>
                 <td class="w-10">@obj.UserName</td>
                 <td class="w-20">@obj.UserEmail</td>
-                <td class="w-20">@obj.RoleName</td>
+                <td class="w-20">@obj.CurrentRoleName</td>
                 <td class="w-10">
                     <form method="post" asp-route-id="@obj.UserId" asp-action="RemoveUser" asp-controller="Account" enctype="multipart/form-data">
                         <div class="row p-4">

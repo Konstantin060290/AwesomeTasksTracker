@@ -174,8 +174,8 @@ public class AccountController : Controller
                 UserId = user.Id,
                 UserName = user.UserName!,
                 UserEmail = user.Email!,
-                RoleName = roleName!,
-                SelectedUserRole = new SelectListItem(roleName, roleName)
+                CurrentRoleName = roleName!,
+                SelectedUserRole = roleName
             };
 
             assignRoleViewModel.Users.Add(userViewModel);
@@ -219,19 +219,18 @@ public class AccountController : Controller
         var user = _context.Users.ToList().FirstOrDefault(u=>u.Id == id);
         var userRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == id);
         var role = _context.Roles.ToList().FirstOrDefault(r=>r.Id == userRole!.RoleId);
-        
+
         var userViewModel = new UserViewModel
         {
             UserName = user!.UserName!,
             UserId = user!.Id!,
             UserEmail = user!.Email!,
-            RoleName = role!.Name!
+            CurrentRoleName = role!.Name!
         };
-
         foreach (var dbRole in _context.Roles.ToList())
         {
-            var selectedRole = new SelectListItem(dbRole.Name, dbRole.Name);
-            userViewModel.Roles.Add(selectedRole);
+            var roleItem = new SelectListItem(dbRole.Name, dbRole.Name);
+            userViewModel.Roles.Add(roleItem);
         }
 
         return View(userViewModel);
@@ -239,12 +238,26 @@ public class AccountController : Controller
     
     [HttpPost]
     [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public async Task<IActionResult> ChangeRolePost(int id, string newRole)
+    public async Task<IActionResult> ChangeRolePost(UserViewModel userViewModel)
     {
-        var userRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == id);
-        var newDbRole = _context.Roles.ToList().FirstOrDefault(r=>r.Name == newRole);
-        userRole!.RoleId = newDbRole!.Id;
-        await _context.SaveChangesAsync();
+        var userCurrentRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == userViewModel.UserId);
+        var newDbRole = _context.Roles.ToList().FirstOrDefault(r=>r.Name == userViewModel.SelectedUserRole);
+        if (newDbRole is not null)
+        {
+            var userId = userCurrentRole!.UserId;
+            _context.UserRoles.Remove(userCurrentRole);
+            await _context.AddAsync(new IdentityUserRole<int>
+            {
+                UserId = userId,
+                RoleId = newDbRole.Id
+            });
+            await _context.SaveChangesAsync();  
+        }
+        else
+        {
+            return NotFound("Указанная роль не найдена");
+        }
+        
         return RedirectToAction("ManageUsers", "Account");
     }
 

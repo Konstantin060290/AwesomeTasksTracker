@@ -1,30 +1,41 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model AuthentificationService.ViewModels.UserViewModel
 
 <h2>Изменить роль попуга</h2>
 
-<form method="post" asp-route-id="@Model.UserId" asp-route-newRole="@Model.SelectedRoleString" asp-controller="Account" asp-action="ChangeRolePost">
+<div>
+    <form method="post" asp-controller="Account" asp-action="ChangeRolePost">
+        <div asp-validation-summary="ModelOnly"></div>
 
-    <div style="margin: 10px">
-        <label asp-for="@Model.UserId"></label>
-        <label>@Model.UserId</label>
-    </div>
-    <div style="margin: 10px">
-        <label asp-for="@Model.UserName"></label>
-        <label>@Model.UserName</label>
-    </div>
-    <div style="margin: 10px">
-        <label asp-for="@Model.UserEmail"></label>
-        <label>@Model.UserEmail</label>
-    </div>
-    <div style="margin: 10px">
-        <label asp-for="@Model.RoleName"></label>
-        <label>@Model.RoleName</label>
-    </div>
-    <div style="margin: 10px">
-        <label asp-for="@Model.SelectedUserRole"></label><br/>
-        <select style="width: auto" asp-for="@Model.SelectedUserRole.Value" asp-items="@Model.Roles" class="form-control">
-            <option selected>--Выберите новую роль--</option>
-        </select>
-    </div>
-    <input style="margin: 10px" class="btn btn-primary mx-2" type="submit" value="Назначить роль"/>
-</form>
+        <div style="margin: 10px">
+            <label asp-for="@Model.UserId"></label>
+            <label>: @Model.UserId</label>
+        </div>
+        <div style="margin: 10px">
+            <label asp-for="@Model.UserName"></label>
+            <label>: @Model.UserName</label>
+        </div>
+        <div style="margin: 10px">
+            <label asp-for="@Model.UserEmail"></label>
+            <label>: @Model.UserEmail</label>
+        </div>
+        <div style="margin: 10px">
+            <label asp-for="@Model.CurrentRoleName"></label>
+            <label>: @Model.CurrentRoleName</label>
+        </div>
+        <label style="margin: 10px">Доступные роли: </label>
+        @{
+            foreach (var role in Model.Roles)
+            {
+                <label>@role.Text; </label>
+            }
+        }
+        <div style="margin: 10px">
+            <label asp-for="@Model.SelectedUserRole"></label><br/>
+            <input asp-for="@Model.SelectedUserRole" value="@Model.SelectedUserRole"/>
+            <input hidden="hidden" asp-for="@Model.UserId"/>
+        </div>
+        <input style="margin: 10px" class="btn btn-primary mx-2" type="submit" value="Назначить роль"/>
+    </form>
+
+</div>

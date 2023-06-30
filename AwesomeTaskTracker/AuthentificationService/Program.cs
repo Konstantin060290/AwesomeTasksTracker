@@ -1,5 +1,7 @@
+using System.Web.Mvc;
 using AuthentificationService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +20,6 @@ builder.Services.AddIdentity<User, Role>(opts=> {
         opts.Password.RequireDigit = false; // требуются ли цифры
     })
     .AddEntityFrameworkStores<ApplicationContext>();
-
 
 var app = builder.Build();
 
@@ -47,5 +48,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
