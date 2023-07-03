@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Threading.Tasks;
 using AuthentificationService.Models;
 using AuthentificationService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
