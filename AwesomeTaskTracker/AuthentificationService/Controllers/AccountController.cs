@@ -1,11 +1,5 @@
-using System;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using AuthentificationService.Models;
 using AuthentificationService.ViewModels;
-using AuthentificationService.WebConstants;
-using Confluent.Kafka;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +12,7 @@ public class AccountController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ApplicationContext _context;
+    private readonly BrokerManager.BrokerManager _brokerManager;
 
     public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
         ApplicationContext context)
@@ -25,6 +20,7 @@ public class AccountController : Controller
         _userManager = userManager;
         _signInManager = signInManager;
         _context = context;
+        _brokerManager = new BrokerManager.BrokerManager();
     }
 
     [HttpGet]
@@ -71,7 +67,7 @@ public class AccountController : Controller
             {
                 await SetNewUserRights(model);
 
-                await SendUserToBroker(model, user);
+                await _brokerManager.SendNewUserToBroker(model, user);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -85,29 +81,6 @@ public class AccountController : Controller
         return View(model);
     }
 
-    private static async Task SendUserToBroker(RegisterViewModel model, User user)
-    {
-        var config = new ProducerConfig
-        {
-            BootstrapServers = "localhost:19092"
-        };
-
-        var userMessage = new UserMessage(user)
-        {
-            UserRoleName = model.SelectedRole.Value
-        };
-
-        var newUserMessage = JsonSerializer.Serialize(userMessage);
-
-        var producerBuilder = new ProducerBuilder<string, string>(config).Build();
-        await producerBuilder.ProduceAsync("Account", new Message<string, string>
-        {
-            Key = EventsNames.UserRegistered,
-            Value = newUserMessage
-        });
-
-        producerBuilder.Flush(TimeSpan.FromSeconds(10));
-    }
 
     private async Task SetNewUserRights(RegisterViewModel model)
     {
@@ -213,115 +186,5 @@ public class AccountController : Controller
         await _context.SaveChangesAsync();
         
         return RedirectToAction("ManageUsers", "Account");
-    }
-    
-    [HttpGet]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public IActionResult ChangeRole(int id)
-    {
-        var user = _context.Users.ToList().FirstOrDefault(u=>u.Id == id);
-        var userRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == id);
-        var role = _context.Roles.ToList().FirstOrDefault(r=>r.Id == userRole!.RoleId);
-
-        var userViewModel = new UserViewModel
-        {
-            UserName = user!.UserName!,
-            UserId = user!.Id!,
-            UserEmail = user!.Email!,
-            CurrentRoleName = role!.Name!
-        };
-        foreach (var dbRole in _context.Roles.ToList())
-        {
-            var roleItem = new SelectListItem(dbRole.Name, dbRole.Name);
-            userViewModel.Roles.Add(roleItem);
-        }
-
-        return View(userViewModel);
-    }
-    
-    [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public async Task<IActionResult> ChangeRolePost(UserViewModel userViewModel)
-    {
-        var userCurrentRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == userViewModel.UserId);
-        var newDbRole = _context.Roles.ToList().FirstOrDefault(r=>r.Name == userViewModel.SelectedUserRole);
-        if (newDbRole is not null)
-        {
-            var userId = userCurrentRole!.UserId;
-            _context.UserRoles.Remove(userCurrentRole);
-            await _context.AddAsync(new IdentityUserRole<int>
-            {
-                UserId = userId,
-                RoleId = newDbRole.Id
-            });
-            await _context.SaveChangesAsync();  
-        }
-        else
-        {
-            return NotFound("Указанная роль не найдена");
-        }
-        
-        return RedirectToAction("ManageUsers", "Account");
-    }
-
-    [HttpGet]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public IActionResult EditRoles()
-    {
-        var roles = _context.Roles.ToList();
-
-        var roleViewModel = new RoleViewModel();
-
-        foreach (var role in roles)
-        {
-            var viewModel = new RoleViewModel
-            {
-                RoleName = role.Name!,
-                RoleId = role.Id
-            };
-
-            roleViewModel.ViewModels?.Add(viewModel);
-        }
-
-        return View(roleViewModel);
-    }
-
-    [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public async Task<IActionResult> AddNewRole(RoleViewModel roleViewModel)
-    {
-        var maxId = _context.Roles.ToList().Select(r => r.Id).Max();
-        var role = new Role
-        {
-            Id = maxId + 1,
-            Name = roleViewModel.RoleName,
-            NormalizedName = roleViewModel.RoleName,
-            ConcurrencyStamp = roleViewModel.RoleName
-        };
-        await _context.Roles.AddAsync(role);
-        await _context.SaveChangesAsync();
-
-        return RedirectToAction("EditRoles", "Account");
-    }
-
-
-    [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public async Task<IActionResult> EditRole(RoleViewModel model, int id)
-    {
-        var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
-        role!.Name = model.RoleName;
-        await _context.SaveChangesAsync();
-        return RedirectToAction("EditRoles", "Account");
-    }
-
-    [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
-    public async Task<IActionResult> DeleteRole(int id)
-    {
-        var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
-        _context.Roles.Remove(role!);
-        await _context.SaveChangesAsync();
-        return RedirectToAction("EditRoles", "Account");
     }
 }
