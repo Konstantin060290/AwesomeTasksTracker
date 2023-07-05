@@ -1,4 +1,6 @@
-namespace AuthentificationService.Models;
+using AuthentificationService.Models;
+
+namespace AuthentificationService.BrokerManager.Contracts;
 
 public class UserMessage
 {

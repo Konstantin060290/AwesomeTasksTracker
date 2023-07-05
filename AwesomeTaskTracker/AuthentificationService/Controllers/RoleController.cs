@@ -64,7 +64,17 @@ public class RoleController: Controller
                 UserId = userId,
                 RoleId = newDbRole.Id
             });
-            await _context.SaveChangesAsync();  
+            await _context.SaveChangesAsync();
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user is not null)
+            {
+                await _brokerManager.SendUserToBroker(userViewModel.SelectedUserRole, user, WebConstants.EventsNames.UserChanged);
+            }
+            else
+            {
+                return NotFound($"Не найден пользователь с id:{userId}");  
+            }
         }
         else
         {

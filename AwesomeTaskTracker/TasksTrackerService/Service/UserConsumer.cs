@@ -6,17 +6,17 @@ using TasksTrackerService.Models;
 
 namespace TasksTrackerService.Service;
 
-public class RegisterConsumer : IRegisterConsumer
+public class UserConsumer : IUserConsumer
 {
     private readonly ApplicationContext _context;
 
-    public RegisterConsumer(ApplicationContext context)
+    public UserConsumer(ApplicationContext context)
     {
         _context = context;
-        ConsumeRegisterUser();
+        ConsumeUsers();
     }
 
-    public void ConsumeRegisterUser()
+    public void ConsumeUsers()
     {
         Task.Run(Listen);
     }
@@ -54,6 +54,10 @@ public class RegisterConsumer : IRegisterConsumer
                     {
                         await ChangeUserInDb(consumeResult, cts);
                     }
+                    if (consumeResult.Message.Key == EventsNames.UserDeleted)
+                    {
+                        await DeleteUserInDb(consumeResult, cts);
+                    }
                 }
                 catch (ConsumeException e)
                 {
@@ -90,9 +94,23 @@ public class RegisterConsumer : IRegisterConsumer
         }
         await _context.SaveChangesAsync(cts.Token);
     }
+    private async Task DeleteUserInDb(ConsumeResult<string, string> consumeResult, CancellationTokenSource cts)
+    {
+        var changedUser = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
+        if (changedUser is null)
+        {
+            return;
+        }
+        var existedUser = _context.Users.FirstOrDefault(u=>u.UserId == changedUser.UserId);
+        if (existedUser is not null)
+        {
+            _context.Users.Remove(existedUser);
+        }
+        await _context.SaveChangesAsync(cts.Token);
+    }
 }
 
-public interface IRegisterConsumer
+public interface IUserConsumer
 {
-    void ConsumeRegisterUser();
+    void ConsumeUsers();
 }

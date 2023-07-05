@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationContext>(o=>o
     .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IRegisterConsumer, RegisterConsumer>();
+builder.Services.AddScoped<IUserConsumer, UserConsumer>();
 
 var app = builder.Build();
 
@@ -31,7 +31,7 @@ app.UseAuthorization();
 
 var scope = app.Services.CreateScope();
 
-scope.ServiceProvider.GetService<IRegisterConsumer>();
+scope.ServiceProvider.GetService<IUserConsumer>();
 
 app.MapControllerRoute(
     name: "default",

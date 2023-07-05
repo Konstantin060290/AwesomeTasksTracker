@@ -1,16 +1,13 @@
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
+using AuthentificationService.BrokerManager.Contracts;
 using AuthentificationService.Models;
-using AuthentificationService.ViewModels;
-using AuthentificationService.WebConstants;
 using Confluent.Kafka;
 
 namespace AuthentificationService.BrokerManager;
 
 public class BrokerManager
 {
-    public async Task SendNewUserToBroker(RegisterViewModel model, User user)
+    public async Task SendUserToBroker(string userRole, User user, string eventName)
     {
         var config = new ProducerConfig
         {
@@ -19,7 +16,7 @@ public class BrokerManager
 
         var userMessage = new UserMessage(user)
         {
-            UserRoleName = model.SelectedRole.Value
+            UserRoleName = userRole
         };
 
         var newUserMessage = JsonSerializer.Serialize(userMessage);
@@ -27,7 +24,7 @@ public class BrokerManager
         var producerBuilder = new ProducerBuilder<string, string>(config).Build();
         await producerBuilder.ProduceAsync("Account", new Message<string, string>
         {
-            Key = EventsNames.UserRegistered,
+            Key = eventName,
             Value = newUserMessage
         });
 

@@ -69,7 +69,7 @@ public class AccountController : Controller
             {
                 await SetNewUserRights(model);
 
-                await _brokerManager.SendNewUserToBroker(model, user);
+                await _brokerManager.SendUserToBroker(model.SelectedRole.Value, user, WebConstants.EventsNames.UserRegistered);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -186,6 +186,9 @@ public class AccountController : Controller
 
         _context.Users.Remove(user!);
         await _context.SaveChangesAsync();
+        var roleName = _context.Roles.FirstOrDefault(r => r.Id == userRole!.RoleId)!.Name;
+
+        await _brokerManager.SendUserToBroker(roleName, user!, WebConstants.EventsNames.UserDeleted);
         
         return RedirectToAction("ManageUsers", "Account");
     }
