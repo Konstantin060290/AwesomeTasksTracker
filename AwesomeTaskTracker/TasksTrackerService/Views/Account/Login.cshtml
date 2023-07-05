@@ -1,22 +1,17 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model AuthentificationService.ViewModels.LoginViewModel 
-@{
-    ViewBag.Title = "Login";
-}
+@model TasksTrackerService.ViewModels.LoginViewModel
+
 <h2>Аутентификация попуга</h2>
 
-<form method="post" asp-controller="Account" asp-action="Login"
-      asp-route-returnurl="@Model.ReturnUrl">
+<form method="post" asp-controller="Account" asp-action="Login">
 
     <div style="margin: 10px">
         <label asp-for="Email"></label>
         <input asp-for="Email"/>
-        <span asp-validation-for="Email"></span>
     </div>
     <div style="margin: 10px">
         <label asp-for="BeakShape"></label>
         <input asp-for="BeakShape"/>
-        <span asp-validation-for="BeakShape"></span>
     </div>
     <input style="margin: 10px" class="btn btn-primary mx-2" type="submit" value="Login"/>
 </form>
