@@ -1,3 +1,4 @@
+using AuthentificationService.BrokerManager;
 using AuthentificationService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<ApplicationContext>(o=>o
     .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -19,9 +22,13 @@ builder.Services.AddIdentity<User, Role>(opts=> {
     })
     .AddEntityFrameworkStores<ApplicationContext>();
 
+builder.Services.AddScoped<IAuthenticateConsumer, AuthenticateConsumer>();
+
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
+
+scope.ServiceProvider.GetService<IAuthenticateConsumer>();
 
 var roleManager = scope.ServiceProvider.GetService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
@@ -46,6 +53,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 app.Run();

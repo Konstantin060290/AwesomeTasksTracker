@@ -1,14 +1,10 @@
-using System;
-using System.Linq;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 using AuthentificationService.WebConstants;
 using Confluent.Kafka;
 using TasksTrackerService.Context;
 using TasksTrackerService.Models;
 
-namespace TasksTrackerService.Service;
+namespace TasksTrackerService.BrokerManager;
 
 public class UserConsumer : IUserConsumer
 {

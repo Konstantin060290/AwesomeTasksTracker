@@ -1,7 +1,6 @@
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Confluent.Kafka;
+using TasksTrackerService.BrokerManager.Contracts;
 
 namespace TasksTrackerService.BrokerManager;
 

@@ -1,4 +1,4 @@
-namespace TasksTrackerService.BrokerManager;
+namespace TasksTrackerService.BrokerManager.Contracts;
 
 public class UserAuthentification
 {
