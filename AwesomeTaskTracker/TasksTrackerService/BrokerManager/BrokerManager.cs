@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AuthentificationService.WebConstants;
 using Confluent.Kafka;
 using TasksTrackerService.BrokerManager.Contracts;
 
@@ -22,7 +23,7 @@ public class BrokerManager
         var newAuthMessage = JsonSerializer.Serialize(userAuthentification);
 
         var producerBuilder = new ProducerBuilder<string, string>(config).Build();
-        await producerBuilder.ProduceAsync("Account", new Message<string, string>
+        await producerBuilder.ProduceAsync(KafkaTopicNames.TaskTrackerAuthRequests, new Message<string, string>
         {
             Key = eventName,
             Value = newAuthMessage

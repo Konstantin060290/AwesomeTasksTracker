@@ -9,10 +9,12 @@ namespace AuthentificationService.Controllers;
 public class AuthenticateBrokerController : Controller
 {
     private readonly SignInManager<User> _signInManager;
+    private readonly BrokerManager.BrokerManager _brokerManager;
 
     public AuthenticateBrokerController(SignInManager<User> signInManager)
     {
         _signInManager = signInManager;
+        _brokerManager = new BrokerManager.BrokerManager();
     }
     
     [HttpPost]
@@ -27,7 +29,11 @@ public class AuthenticateBrokerController : Controller
             userMessage.UserPassword, false, false);
         if (result.Succeeded)
         {
-            //TODO Отправить в брокер результат
+            await _brokerManager.SendAuthConfirm(userMessage.UserEmail, WebConstants.EventsNames.UserAuthenticated);
+        }
+        else
+        {
+            await _brokerManager.SendAuthConfirm(userMessage.UserEmail, WebConstants.EventsNames.UserNotAuthenticated);
         }
     }
 }

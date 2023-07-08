@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\EventsNames.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaTopicNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\WebConstants.cs" />
   </ItemGroup>
 </Project>

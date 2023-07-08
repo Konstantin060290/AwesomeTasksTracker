@@ -16,7 +16,6 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        TempData["IsAuthenticate"] = false;
         return View();
     }
 

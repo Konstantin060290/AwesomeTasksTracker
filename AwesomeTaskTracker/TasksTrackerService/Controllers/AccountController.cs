@@ -1,7 +1,7 @@
-using System;
-using System.Threading.Tasks;
+using System.Runtime.Caching;
 using AuthentificationService.WebConstants;
 using Microsoft.AspNetCore.Mvc;
+using TasksTrackerService.BrokerManager;
 using TasksTrackerService.ViewModels;
 
 namespace TasksTrackerService.Controllers;
@@ -17,14 +17,14 @@ public class AccountController : Controller
 
     public IActionResult Logout()
     {
-        throw new NotImplementedException();
+        MemoryCache.Default.Remove(EventsNames.UserAuthenticated);
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
     public IActionResult Login()
     {
         var loginViewModel = new LoginViewModel();
-        TempData["IsAuthenticate"] = false;
         return View(loginViewModel);
     }
 
@@ -33,6 +33,14 @@ public class AccountController : Controller
     {
         await _brokerManager.SendAuthenticate(viewModel.Email, viewModel.BeakShape,
             EventsNames.UserAuthenticateRequest);
-        return RedirectToAction("Index", "Home");
+
+        var consumer = new AuthConsumer();
+        var result = consumer.ConsumeAuthenticate(viewModel.Email);
+        if (result is OkResult)
+        {
+            return RedirectToAction("Index", "Home");   
+        }
+
+        return result;
     }
 }

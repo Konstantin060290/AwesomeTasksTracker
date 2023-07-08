@@ -30,11 +30,11 @@ public class AuthenticateConsumer : IAuthenticateConsumer
         var config = new ConsumerConfig
         {
             BootstrapServers = "localhost:19092",
-            GroupId = "testConsume"
+            GroupId = "AuthenticateConsumer"
         };
 
         using var builder = new ConsumerBuilder<string, string>(config).Build();
-        builder.Subscribe("Account");
+        builder.Subscribe(KafkaTopicNames.TaskTrackerAuthRequests);
 
         var cts = new CancellationTokenSource();
         Console.CancelKeyPress += (_, e) =>

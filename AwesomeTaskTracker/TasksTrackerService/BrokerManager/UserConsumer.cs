@@ -26,7 +26,7 @@ public class UserConsumer : IUserConsumer
         var config = new ConsumerConfig
         {
             BootstrapServers = "localhost:19092",
-            GroupId = "testConsume"
+            GroupId = "UserConsumer"
         };
 
         using var builder = new ConsumerBuilder<string, string>(config).Build();
