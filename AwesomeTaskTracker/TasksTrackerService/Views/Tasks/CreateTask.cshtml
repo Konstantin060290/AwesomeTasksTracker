@@ -1,0 +1,54 @@
+@model TasksTrackerService.ViewModels.TaskViewModel
+
+
+<h2>Создать задачу</h2>
+
+<form method="post" asp-controller="Tasks" asp-action="CreateTask">
+    <table name="MainTable" class="table table-bordered table table-striped" style="width:100%">
+        <thead>
+        <tr>
+            <th>
+                <label class="align-middle" asp-for="@Model.TaskId"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.TaskDescription"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Responsible"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Price"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Status"></label>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="w-10">
+                <label class="align-middle">@Model.TaskId</label>
+            </td>
+            <td class="w-20">
+                <input class="align-middle" asp-for="@Model.TaskDescription"/>
+            </td>
+            <td class="w-20">
+                <input class="align-middle" asp-for="@Model.Responsible"/>
+            </td>
+            <td class="w-20">
+                <label class="align-middle">@Model.Price</label>
+            </td>
+            <td class="w-20">
+                <label class="align-middle">@Model.Status</label>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <input type="submit" value="Создать задачу"/>
+    <div hidden="hidden">
+        <input asp-for="Price"/>
+        <input asp-for="Status"/>
+        <input asp-for="TaskId"/>
+        <input asp-for="Responsible"/>
+    </div>
+</form>

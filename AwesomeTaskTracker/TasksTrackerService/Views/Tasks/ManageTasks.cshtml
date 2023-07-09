@@ -24,6 +24,9 @@
                 <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.TaskDescription"></label>
             </th>
             <th>
+                <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.Status"></label>
+            </th>
+            <th>
                 <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.Responsible"></label>
             </th>
             <th>
@@ -38,6 +41,7 @@
             <tr>
                 <td class="w-10">@obj.TaskId</td>
                 <td class="w-10">@obj.TaskDescription</td>
+                <td class="w-10">@obj.Status</td>
                 <td class="w-20">@obj.Responsible</td>
                 <td class="w-20">@obj.Price</td>
             </tr>
@@ -55,6 +59,6 @@ else
 {
     <p>Нет задач</p>
 }
-<div class="col-7">
-    <input style="margin: 5px" class="btn btn-primary" type="submit" value="Создать задачу"/>
-</div>
+<form method="get" asp-controller="Tasks" asp-route-email="@Model.UserEmail" asp-action="CreateTask">
+    <input type="submit" value="Создать задачу"/>
+</form>

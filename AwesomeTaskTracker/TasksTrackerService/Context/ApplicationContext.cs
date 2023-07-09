@@ -6,7 +6,8 @@ namespace TasksTrackerService.Context;
 public sealed class ApplicationContext : DbContext
 {
     public DbSet<User> Users { get; set; } = null!;
- 
+    public DbSet<PopTask> PopTasks { get; set; } = null!;
+
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
     {
