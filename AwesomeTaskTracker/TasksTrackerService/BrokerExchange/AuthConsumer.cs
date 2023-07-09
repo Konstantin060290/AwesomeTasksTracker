@@ -36,11 +36,13 @@ public class AuthConsumer : Controller
                         {
                             ObjectCache cache = MemoryCache.Default;
 
+                            var userAuth = new Dictionary<string, bool> { { userMail, true } };
+
                             var cacheItemPolicy = new CacheItemPolicy
                             {
                             };
-                            
-                            cache.Set(EventsNames.UserAuthenticated, true, cacheItemPolicy);
+     
+                            cache.Set(EventsNames.UserAuthenticated, userAuth, cacheItemPolicy);
                             
                             break;
                         }

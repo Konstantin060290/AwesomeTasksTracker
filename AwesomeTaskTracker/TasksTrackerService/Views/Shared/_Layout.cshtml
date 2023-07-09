@@ -23,9 +23,11 @@
                 <div role="group">
                     @{
                         var auth = false;
+                        var userEmail = "";
                         try
                         {
-                            auth = (bool)MemoryCache.Default.Get(EventsNames.UserAuthenticated);
+                            auth = ((Dictionary<string, bool>)MemoryCache.Default.Get(EventsNames.UserAuthenticated)).FirstOrDefault().Value;
+                            userEmail = ((Dictionary<string, bool>)MemoryCache.Default.Get(EventsNames.UserAuthenticated)).FirstOrDefault().Key;
                         }
                         catch (Exception e)
                         {
@@ -34,9 +36,16 @@
                     }
                     @if (auth)
                     {
-                        <form method="post" asp-controller="Account" asp-action="Logout">
-                            <input type="submit" value="Выйти"/>
-                        </form>
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <input type="submit" value="Выйти, @userEmail"/>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary mx-2" asp-route-email="@userEmail" asp-controller="Tasks" asp-action="ManageTasks">Управление задачами</a>
+                            </li>
+                        </ul>
                     }
                     else
                     {
