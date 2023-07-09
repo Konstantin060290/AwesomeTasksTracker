@@ -1,10 +1,11 @@
 using System.Text.Json;
-using AuthentificationService.WebConstants;
 using Confluent.Kafka;
+using TasksTrackerService.BrokerCommon;
 using TasksTrackerService.Context;
 using TasksTrackerService.Models;
+using TasksTrackerService.WebConstants;
 
-namespace TasksTrackerService.BrokerManager;
+namespace TasksTrackerService.BrokerExchange;
 
 public class UserConsumer : IUserConsumer
 {
@@ -23,14 +24,9 @@ public class UserConsumer : IUserConsumer
 
     private async void Listen()
     {
-        var config = new ConsumerConfig
-        {
-            BootstrapServers = "localhost:19092",
-            GroupId = "UserConsumer"
-        };
+        using var builder = ConsumerCommon.BuildConsumer(KafkaConsumeGroupsNames.UserConsumer);
 
-        using var builder = new ConsumerBuilder<string, string>(config).Build();
-        builder.Subscribe("Account");
+        builder.Subscribe(KafkaTopicNames.Account);
 
         var cts = new CancellationTokenSource();
         Console.CancelKeyPress += (_, e) =>

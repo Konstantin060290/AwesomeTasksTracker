@@ -1,23 +1,19 @@
 using System.Runtime.Caching;
 using System.Text.Json;
-using AuthentificationService.WebConstants;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
-using TasksTrackerService.BrokerManager.Contracts;
+using TasksTrackerService.BrokerCommon;
+using TasksTrackerService.BrokerExchange.Contracts;
+using TasksTrackerService.WebConstants;
 
-namespace TasksTrackerService.BrokerManager;
+namespace TasksTrackerService.BrokerExchange;
 
 public class AuthConsumer : Controller
 {
-    public IActionResult  ConsumeAuthenticate(string email)
+    public IActionResult  ConsumeAuthenticateConfirm(string email)
     {
-        var config = new ConsumerConfig
-        {
-            BootstrapServers = "localhost:19092",
-            GroupId = "AuthConsumer"
-        };
+        using var builder = ConsumerCommon.BuildConsumer(KafkaConsumeGroupsNames.AuthenticateConsumer);
 
-        using var builder = new ConsumerBuilder<string, string>(config).Build();
         builder.Subscribe(KafkaTopicNames.TaskTrackerAuthAnswers);
 
         var cts = new CancellationTokenSource();

@@ -9,7 +9,10 @@
     <Import_RootNamespace>AwesomeServicesShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BrokerCommon\ConsumerCommon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BrokerCommon\ProducerCommon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\EventsNames.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaConsumeGroupsNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaTopicNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\WebConstants.cs" />
   </ItemGroup>

@@ -1,20 +1,21 @@
-using AuthentificationService.BrokerManager.Contracts;
+using AuthentificationService.BrokerExchange.Contracts;
 using AuthentificationService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TasksTrackerService.WebConstants;
 
 namespace AuthentificationService.Controllers;
 
 public class AuthenticateBrokerController : Controller
 {
     private readonly SignInManager<User> _signInManager;
-    private readonly BrokerManager.BrokerManager _brokerManager;
+    private readonly BrokerExchange.BrokerProducer _brokerProducer;
 
     public AuthenticateBrokerController(SignInManager<User> signInManager)
     {
         _signInManager = signInManager;
-        _brokerManager = new BrokerManager.BrokerManager();
+        _brokerProducer = new BrokerExchange.BrokerProducer();
     }
     
     [HttpPost]
@@ -29,11 +30,11 @@ public class AuthenticateBrokerController : Controller
             userMessage.UserPassword, false, false);
         if (result.Succeeded)
         {
-            await _brokerManager.SendAuthConfirm(userMessage.UserEmail, WebConstants.EventsNames.UserAuthenticated);
+            await _brokerProducer.SendAuthConfirm(userMessage.UserEmail, EventsNames.UserAuthenticated);
         }
         else
         {
-            await _brokerManager.SendAuthConfirm(userMessage.UserEmail, WebConstants.EventsNames.UserNotAuthenticated);
+            await _brokerProducer.SendAuthConfirm(userMessage.UserEmail, EventsNames.UserNotAuthenticated);
         }
     }
 }

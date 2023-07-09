@@ -1,10 +1,11 @@
 using System.Text;
 using AuthentificationService.Models;
-using AuthentificationService.WebConstants;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Identity;
+using TasksTrackerService.BrokerCommon;
+using TasksTrackerService.WebConstants;
 
-namespace AuthentificationService.BrokerManager;
+namespace AuthentificationService.BrokerExchange;
 
 public class AuthenticateConsumer : IAuthenticateConsumer
 {
@@ -27,13 +28,8 @@ public class AuthenticateConsumer : IAuthenticateConsumer
 
     private async void Listen()
     {
-        var config = new ConsumerConfig
-        {
-            BootstrapServers = "localhost:19092",
-            GroupId = "AuthenticateConsumer"
-        };
+        using var builder = ConsumerCommon.BuildConsumer(KafkaConsumeGroupsNames.AuthenticateConsumer);
 
-        using var builder = new ConsumerBuilder<string, string>(config).Build();
         builder.Subscribe(KafkaTopicNames.TaskTrackerAuthRequests);
 
         var cts = new CancellationTokenSource();

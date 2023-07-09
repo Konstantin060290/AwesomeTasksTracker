@@ -1,4 +1,4 @@
-namespace AuthentificationService.BrokerManager.Contracts;
+namespace AuthentificationService.BrokerExchange.Contracts;
 
 public class UserAuthentification
 {

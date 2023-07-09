@@ -1,4 +1,4 @@
-using AuthentificationService.BrokerManager;
+using AuthentificationService.BrokerExchange;
 using AuthentificationService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

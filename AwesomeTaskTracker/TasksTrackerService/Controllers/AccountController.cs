@@ -1,18 +1,18 @@
 using System.Runtime.Caching;
-using AuthentificationService.WebConstants;
 using Microsoft.AspNetCore.Mvc;
-using TasksTrackerService.BrokerManager;
+using TasksTrackerService.BrokerExchange;
 using TasksTrackerService.ViewModels;
+using TasksTrackerService.WebConstants;
 
 namespace TasksTrackerService.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly BrokerManager.BrokerManager _brokerManager;
+    private readonly BrokerProducer _brokerProducer;
 
     public AccountController()
     {
-        _brokerManager = new BrokerManager.BrokerManager();
+        _brokerProducer = new BrokerProducer();
     }
 
     public IActionResult Logout()
@@ -31,11 +31,11 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel viewModel)
     {
-        await _brokerManager.SendAuthenticate(viewModel.Email, viewModel.BeakShape,
+        await _brokerProducer.SendAuthenticateRequest(viewModel.Email, viewModel.BeakShape,
             EventsNames.UserAuthenticateRequest);
 
         var consumer = new AuthConsumer();
-        var result = consumer.ConsumeAuthenticate(viewModel.Email);
+        var result = consumer.ConsumeAuthenticateConfirm(viewModel.Email);
         if (result is OkResult)
         {
             return RedirectToAction("Index", "Home");   

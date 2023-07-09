@@ -1,4 +1,4 @@
-namespace TasksTrackerService.BrokerManager.Contracts;
+namespace TasksTrackerService.BrokerExchange.Contracts;
 
 public class AuthConfirm
 {

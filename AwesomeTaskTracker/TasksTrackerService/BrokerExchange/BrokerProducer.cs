@@ -1,28 +1,25 @@
 using System.Text.Json;
-using AuthentificationService.WebConstants;
 using Confluent.Kafka;
-using TasksTrackerService.BrokerManager.Contracts;
+using TasksTrackerService.BrokerCommon;
+using TasksTrackerService.BrokerExchange.Contracts;
+using TasksTrackerService.WebConstants;
 
-namespace TasksTrackerService.BrokerManager;
+namespace TasksTrackerService.BrokerExchange;
 
-public class BrokerManager
+public class BrokerProducer
 {
-    public async Task SendAuthenticate(string userMail, string userPassword, string eventName)
+    public async Task SendAuthenticateRequest(string userMail, string userPassword, string eventName)
     {
-        var config = new ProducerConfig
-        {
-            BootstrapServers = "localhost:19092"
-        };
-
         var userAuthentification = new UserAuthentification
         {
             UserPassword = userPassword,
             UserEmail = userMail
         };
-        
+
         var newAuthMessage = JsonSerializer.Serialize(userAuthentification);
 
-        var producerBuilder = new ProducerBuilder<string, string>(config).Build();
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
         await producerBuilder.ProduceAsync(KafkaTopicNames.TaskTrackerAuthRequests, new Message<string, string>
         {
             Key = eventName,

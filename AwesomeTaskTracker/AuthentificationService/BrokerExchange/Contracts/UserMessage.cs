@@ -1,6 +1,6 @@
 using AuthentificationService.Models;
 
-namespace AuthentificationService.BrokerManager.Contracts;
+namespace AuthentificationService.BrokerExchange.Contracts;
 
 public class UserMessage
 {

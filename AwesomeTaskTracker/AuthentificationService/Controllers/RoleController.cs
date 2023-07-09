@@ -1,18 +1,17 @@
-using System.Linq;
-using System.Threading.Tasks;
 using AuthentificationService.Models;
 using AuthentificationService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TasksTrackerService.WebConstants;
 
 namespace AuthentificationService.Controllers;
 
 public class RoleController: Controller
 {
     private readonly ApplicationContext _context;
-    private readonly BrokerManager.BrokerManager _brokerManager;
+    private readonly BrokerExchange.BrokerProducer _brokerProducer;
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
 
@@ -22,11 +21,11 @@ public class RoleController: Controller
         _userManager = userManager;
         _signInManager = signInManager;
         _context = context;
-        _brokerManager = new BrokerManager.BrokerManager();
+        _brokerProducer = new BrokerExchange.BrokerProducer();
     }
     
     [HttpGet]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public IActionResult ChangeRole(int id)
     {
         var user = _context.Users.ToList().FirstOrDefault(u=>u.Id == id);
@@ -50,7 +49,7 @@ public class RoleController: Controller
     }
     
     [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public async Task<IActionResult> ChangeRolePost(UserViewModel userViewModel)
     {
         var userCurrentRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == userViewModel.UserId);
@@ -69,7 +68,7 @@ public class RoleController: Controller
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
             if (user is not null)
             {
-                await _brokerManager.SendUserToBroker(userViewModel.SelectedUserRole, user, WebConstants.EventsNames.UserChanged);
+                await _brokerProducer.SendUserToBroker(userViewModel.SelectedUserRole, user, EventsNames.UserChanged);
             }
             else
             {
@@ -85,7 +84,7 @@ public class RoleController: Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public IActionResult EditRoles()
     {
         var roles = _context.Roles.ToList();
@@ -107,7 +106,7 @@ public class RoleController: Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public async Task<IActionResult> AddNewRole(RoleViewModel roleViewModel)
     {
         var maxId = _context.Roles.ToList().Select(r => r.Id).Max();
@@ -126,7 +125,7 @@ public class RoleController: Controller
 
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public async Task<IActionResult> EditRole(RoleViewModel model, int id)
     {
         var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
@@ -136,7 +135,7 @@ public class RoleController: Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public async Task<IActionResult> DeleteRole(int id)
     {
         var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);

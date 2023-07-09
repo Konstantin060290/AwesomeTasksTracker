@@ -1,11 +1,10 @@
-using System.Linq;
-using System.Threading.Tasks;
 using AuthentificationService.Models;
 using AuthentificationService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TasksTrackerService.WebConstants;
 
 namespace AuthentificationService.Controllers;
 
@@ -14,7 +13,7 @@ public class AccountController : Controller
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ApplicationContext _context;
-    private readonly BrokerManager.BrokerManager _brokerManager;
+    private readonly BrokerExchange.BrokerProducer _brokerProducer;
 
     public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
         ApplicationContext context)
@@ -22,7 +21,7 @@ public class AccountController : Controller
         _userManager = userManager;
         _signInManager = signInManager;
         _context = context;
-        _brokerManager = new BrokerManager.BrokerManager();
+        _brokerProducer = new BrokerExchange.BrokerProducer();
     }
 
     [HttpGet]
@@ -69,7 +68,7 @@ public class AccountController : Controller
             {
                 await SetNewUserRights(model);
 
-                await _brokerManager.SendUserToBroker(model.SelectedRole.Value, user, WebConstants.EventsNames.UserRegistered);
+                await _brokerProducer.SendUserToBroker(model.SelectedRole.Value, user, EventsNames.UserRegistered);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -133,7 +132,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public IActionResult ManageUsers()
     {
         var users = _context.Users.ToList();
@@ -168,7 +167,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.WebConstants.AdminRole)]
+    [Authorize(Roles = WebConstants.AdminRole)]
     public async Task<IActionResult> RemoveUser(int id)
     {
         var userRole = _context.UserRoles.ToList().FirstOrDefault(ur => ur.UserId == id);
@@ -188,7 +187,7 @@ public class AccountController : Controller
         await _context.SaveChangesAsync();
         var roleName = _context.Roles.FirstOrDefault(r => r.Id == userRole!.RoleId)!.Name;
 
-        await _brokerManager.SendUserToBroker(roleName, user!, WebConstants.EventsNames.UserDeleted);
+        await _brokerProducer.SendUserToBroker(roleName, user!, EventsNames.UserDeleted);
         
         return RedirectToAction("ManageUsers", "Account");
     }

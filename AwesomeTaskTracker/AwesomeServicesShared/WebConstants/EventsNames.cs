@@ -1,4 +1,4 @@
-namespace AuthentificationService.WebConstants;
+namespace TasksTrackerService.WebConstants;
 
 public static class EventsNames
 {

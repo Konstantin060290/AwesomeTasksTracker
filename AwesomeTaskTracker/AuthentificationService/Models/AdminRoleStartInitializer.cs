@@ -1,6 +1,5 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using TasksTrackerService.WebConstants;
 
 namespace AuthentificationService.Models;
 
@@ -15,8 +14,8 @@ public abstract class AdminRoleStartInitializer
 
     private static async Task AddAdminRoleToUser(UserManager<User> userManager, RoleManager<Role> roleManager)
     {
-        var admin = userManager.Users.FirstOrDefault(u => u.Email == WebConstants.WebConstants.AdminEmail);
-        var adminRole = roleManager.Roles.FirstOrDefault(r => r.Name == WebConstants.WebConstants.AdminRole);
+        var admin = userManager.Users.FirstOrDefault(u => u.Email == WebConstants.AdminEmail);
+        var adminRole = roleManager.Roles.FirstOrDefault(r => r.Name == WebConstants.AdminRole);
         await userManager.AddToRoleAsync(admin!, adminRole!.NormalizedName!);
     }
 
@@ -31,16 +30,16 @@ public abstract class AdminRoleStartInitializer
         var admin = new User
         {
             Id = 1,
-            Email = WebConstants.WebConstants.AdminEmail,
-            UserName = WebConstants.WebConstants.AdminEmail
+            Email = WebConstants.AdminEmail,
+            UserName = WebConstants.AdminEmail
         };
 
-        await userManager.CreateAsync(admin, WebConstants.WebConstants.AdminEmail);
+        await userManager.CreateAsync(admin, WebConstants.AdminEmail);
     }
 
     private static async Task AddAdminRoleToDb(RoleManager<Role> roleManager)
     {
-        var adminRole = roleManager.Roles.ToList().FirstOrDefault(r => r.Name == WebConstants.WebConstants.AdminRole);
+        var adminRole = roleManager.Roles.ToList().FirstOrDefault(r => r.Name == WebConstants.AdminRole);
 
         if (adminRole is not null)
         {
@@ -57,9 +56,9 @@ public abstract class AdminRoleStartInitializer
         var newAdmin = new Role
         {
             Id = newId,
-            Name = WebConstants.WebConstants.AdminRole,
-            ConcurrencyStamp = WebConstants.WebConstants.AdminRole,
-            NormalizedName = WebConstants.WebConstants.AdminRole
+            Name = WebConstants.AdminRole,
+            ConcurrencyStamp = WebConstants.AdminRole,
+            NormalizedName = WebConstants.AdminRole
         };
 
         await roleManager.CreateAsync(newAdmin);

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TasksTrackerService.BrokerManager;
+using TasksTrackerService.BrokerExchange;
 using TasksTrackerService.Context;
 
 var builder = WebApplication.CreateBuilder(args);
