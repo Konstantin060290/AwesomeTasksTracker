@@ -4,7 +4,7 @@
 @{
     if (Model.UserRole == WebConstants.ManagerRole)
     {
-        <h2>Все активные задачи</h2>
+        <h2>Все задачи</h2>
     }
     else
     {
@@ -32,27 +32,38 @@
             <th>
                 <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.Price"></label>
             </th>
+            <th>
+                <label class="align-middle">Завершить задачу</label>
+            </th>
         </tr>
         </thead>
         <tbody>
 
         @foreach (var obj in Model.Tasks)
         {
-            <tr>
+            <tr class="ta">
                 <td class="w-10">@obj.TaskId</td>
                 <td class="w-10">@obj.TaskDescription</td>
                 <td class="w-10">@obj.Status</td>
                 <td class="w-20">@obj.Responsible</td>
                 <td class="w-20">@obj.Price</td>
+                <td class="w-20">
+                    @if (obj.Status != TasksStatuses.FinishedTaskStatus)
+                    {
+                        <form method="post" asp-route-id="@obj.TaskId" asp-action="FinishTask" asp-controller="Tasks" enctype="multipart/form-data">
+                            <input style="margin: 5px" class="btn mx-2 w-60 bg-success" value="Завершить задачу" type="submit"/>
+                        </form> 
+                    }
+                </td>
             </tr>
         }
         </tbody>
     </table>
-    if (Model.UserRole == WebConstants.ManagerRole)
+    if (Model.UserRole == WebConstants.ManagerRole || Model.UserRole == WebConstants.AdminRole)
     {
-        <div class="col-7">
-            <input style="margin: 5px" class="btn btn-primary" type="submit" value="Заассайнить задачи"/>
-        </div>
+        <form method="post" asp-controller="Tasks" asp-action="AssignTasks">
+            <input type="submit" value="Заассайнить задачи"/>
+        </form>
     }
 }
 else

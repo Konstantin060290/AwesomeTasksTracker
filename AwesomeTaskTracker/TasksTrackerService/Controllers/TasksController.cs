@@ -19,6 +19,11 @@ public class TasksController : Controller
     [HttpGet]
     public IActionResult ManageTasks(string? email)
     {
+        if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
+        {
+            return Unauthorized("Попуг не аутентифицирован");
+        }
+
         var dbUser = _context.Users.FirstOrDefault(u => u.Email == email);
         if (dbUser is null)
         {
@@ -38,20 +43,41 @@ public class TasksController : Controller
         };
 
         var tasks = _context.PopTasks.Select(t => t).ToList();
-        if (tasks.Count > 0)
+        if (userRoleName is WebConstants.WebConstants.AdminRole or WebConstants.WebConstants.ManagerRole)
         {
-            foreach (var task in tasks)
+            if (tasks.Count > 0)
             {
-                var taskViewModel = new TaskViewModel
+                foreach (var task in tasks)
                 {
-                    TaskId = task.Id,
-                    TaskDescription = task.TaskDescription,
-                    Price = task.Price.ToString(CultureInfo.InvariantCulture),
-                    Responsible = task.Responsible,
-                    Status = task.Status
-                };
-                viewModel.Tasks.Add(taskViewModel);
-            }
+                    var taskViewModel = new TaskViewModel
+                    {
+                        TaskId = task.Id,
+                        TaskDescription = task.TaskDescription,
+                        Price = task.Price.ToString(CultureInfo.InvariantCulture),
+                        Responsible = task.Responsible,
+                        Status = task.Status
+                    };
+                    viewModel.Tasks.Add(taskViewModel);
+                }
+            } 
+        }
+        else
+        {
+            if (tasks.Count > 0)
+            {
+                foreach (var task in tasks.Where(t=>t.Responsible == userEmail).ToList())
+                {
+                    var taskViewModel = new TaskViewModel
+                    {
+                        TaskId = task.Id,
+                        TaskDescription = task.TaskDescription,
+                        Price = task.Price.ToString(CultureInfo.InvariantCulture),
+                        Responsible = task.Responsible,
+                        Status = task.Status
+                    };
+                    viewModel.Tasks.Add(taskViewModel);
+                }
+            }  
         }
 
         return View(viewModel);
@@ -60,6 +86,11 @@ public class TasksController : Controller
     [HttpGet]
     public IActionResult CreateTask(string email)
     {
+        if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
+        {
+            return Unauthorized("Попуг не аутентифицирован");
+        }
+        
         var allId = _context.PopTasks.Select(t => t.Id).ToList();
         var maxId = 0;
         
@@ -76,11 +107,11 @@ public class TasksController : Controller
         var allUsers = _context.Users.Select(u => u).ToList();
         foreach (var user in allUsers)
         {
-            var userEmail = user.Email;
+            var mail = user.Email;
             
             viewModel.AllUsers = new SelectList(new List<SelectListItem>
             {
-                new() { Text = userEmail, Value = userEmail },
+                new() { Text = mail, Value = mail },
             }, "Value", "Text");
         }
 
@@ -93,17 +124,74 @@ public class TasksController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateTask(TaskViewModel viewModel)
     {
+        if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
+        {
+            return Unauthorized("Попуг не аутентифицирован");
+        }
+        
         var task = new PopTask
         {
             TaskDescription = viewModel.TaskDescription,
             Responsible = viewModel.Responsible,
             Price = Convert.ToDouble(viewModel.Price),
-            Status = "New"
+            Status = WebConstants.TasksStatuses.NewTaskStatus
         };
         await _context.PopTasks.AddAsync(task);
         await _context.SaveChangesAsync();
         
-        return RedirectToAction("ManageTasks", "Tasks");
+        return RedirectToAction("ManageTasks", new { email = userEmail });
     }
-   
+    
+    [HttpPost]
+    public async Task<IActionResult>AssignTasks()
+    {
+        if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
+        {
+            return Unauthorized("Попуг не аутентифицирован");
+        }
+        if (userRoleName is WebConstants.WebConstants.AdminRole or WebConstants.WebConstants.ManagerRole)
+        {
+            var tasks = _context.PopTasks.ToList().Where(t=>t.Status!= WebConstants.TasksStatuses.FinishedTaskStatus);
+            var users = _context.Users.ToArray();
+        
+            foreach (var task in tasks)
+            {
+                var random = new Random();
+                var index = random.Next(0, users.Length);
+                task.Responsible = users[index].Email;
+            }
+        
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageTasks", new { email = userEmail });
+
+        }
+
+        return Unauthorized("Попуг не имеет прав");
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult>FinishTask(int id)
+    {
+        if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
+        {
+            return Unauthorized("Попуг не аутентифицирован");
+        }
+        if (userRoleName is WebConstants.WebConstants.AdminRole or WebConstants.WebConstants.ManagerRole)
+        {
+            var tasks = _context.PopTasks.ToList();
+
+            var taskForFinish = tasks.FirstOrDefault(t => t.Id == id);
+
+            taskForFinish!.Status = WebConstants.TasksStatuses.FinishedTaskStatus;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageTasks", new { email = userEmail });
+
+        }
+
+        return Unauthorized("Попуг не имеет прав");
+    }
+
 }

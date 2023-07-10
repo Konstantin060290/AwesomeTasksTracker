@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\EventsNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaConsumeGroupsNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaTopicNames.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebConstants\TasksStatuses.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\WebConstants.cs" />
   </ItemGroup>
 </Project>
