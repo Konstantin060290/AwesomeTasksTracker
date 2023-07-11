@@ -13,4 +13,8 @@ public static class EventsNames
     public const string UserAuthenticated = "UserAuthenticated";
     
     public const string UserNotAuthenticated = "UserNotAuthenticated";
+    
+    public const string PriceWasRequested = "PriceWasRequested";
+    
+    public const string PriceWasCalculated = "PriceWasCalculated";
 }

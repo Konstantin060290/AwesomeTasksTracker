@@ -9,6 +9,4 @@ public class User
     public string Email { get; set; } = "";
     public string UserRoleName { get; set; } = "";
     public string UserName { get; set; } = "";
-
-    public bool IsAuthenticated;
 }

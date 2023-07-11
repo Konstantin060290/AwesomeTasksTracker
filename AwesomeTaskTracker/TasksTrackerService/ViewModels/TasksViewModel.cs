@@ -27,6 +27,9 @@ public class TaskViewModel
     [Display(Name = "Все попуги")]
     public SelectList? AllUsers { get; set; }
     
-    [Display(Name = "Стоимость задачи")]
-    public string Price { get; set; } = "";
+    [Display(Name = "Стоимость задачи при ассайне")]
+    public string PriceAssignedTask { get; set; } = "";
+    
+    [Display(Name = "Стоимость задачи при завершении")]
+    public string PriceCompletedTask { get; set; } = "";
 }

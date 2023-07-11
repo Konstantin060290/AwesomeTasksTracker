@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TasksTrackerService.BrokerExchange;
 using TasksTrackerService.Context;
 using TasksTrackerService.Models;
 using TasksTrackerService.ViewModels;
@@ -10,10 +11,12 @@ namespace TasksTrackerService.Controllers;
 public class TasksController : Controller
 {
     private readonly ApplicationContext _context;
+    private readonly BrokerProducer _brokerProducer;
 
     public TasksController(ApplicationContext context)
     {
         _context = context;
+        _brokerProducer = new BrokerProducer();
     }
 
     [HttpGet]
@@ -53,7 +56,8 @@ public class TasksController : Controller
                     {
                         TaskId = task.Id,
                         TaskDescription = task.TaskDescription,
-                        Price = task.Price.ToString(CultureInfo.InvariantCulture),
+                        PriceAssignedTask = task.PriceAssignedTask.ToString(CultureInfo.InvariantCulture),
+                        PriceCompletedTask = task.PriceCompletedTask.ToString(CultureInfo.InvariantCulture),
                         Responsible = task.Responsible,
                         Status = task.Status
                     };
@@ -71,7 +75,8 @@ public class TasksController : Controller
                     {
                         TaskId = task.Id,
                         TaskDescription = task.TaskDescription,
-                        Price = task.Price.ToString(CultureInfo.InvariantCulture),
+                        PriceAssignedTask = task.PriceAssignedTask.ToString(CultureInfo.InvariantCulture),
+                        PriceCompletedTask = task.PriceCompletedTask.ToString(CultureInfo.InvariantCulture),
                         Responsible = task.Responsible,
                         Status = task.Status
                     };
@@ -84,7 +89,7 @@ public class TasksController : Controller
     }
     
     [HttpGet]
-    public IActionResult CreateTask(string email)
+    public async Task<IActionResult> CreateTask(string email)
     {
         if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
         {
@@ -116,7 +121,22 @@ public class TasksController : Controller
         }
 
         viewModel.Status = "New";
-        viewModel.Price = "100";
+
+        await _brokerProducer.SendTaskPriceRequest(viewModel.TaskId, WebConstants.EventsNames.PriceWasRequested);
+        var priceConsumer = new PriceConsumer();
+        var priceAnswer = priceConsumer.ConsumePrice(viewModel.TaskId);
+
+        if (priceAnswer is not null)
+        {
+            viewModel.PriceAssignedTask = priceAnswer.PriceAssignTask.ToString(CultureInfo.InvariantCulture);
+            viewModel.PriceCompletedTask = priceAnswer.PriceCompleteTask.ToString(CultureInfo.InvariantCulture);  
+        }
+        else
+        {
+            viewModel.PriceAssignedTask = "0";
+            viewModel.PriceCompletedTask = "0"; 
+        }
+
         
         return View(viewModel);
     }
@@ -133,7 +153,8 @@ public class TasksController : Controller
         {
             TaskDescription = viewModel.TaskDescription,
             Responsible = viewModel.Responsible,
-            Price = Convert.ToDouble(viewModel.Price),
+            PriceAssignedTask = Convert.ToDouble(viewModel.PriceAssignedTask),
+            PriceCompletedTask = Convert.ToDouble(viewModel.PriceCompletedTask),
             Status = WebConstants.TasksStatuses.NewTaskStatus
         };
         await _context.PopTasks.AddAsync(task);

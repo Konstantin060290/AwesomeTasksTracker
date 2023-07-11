@@ -9,5 +9,6 @@ public class PopTask
     public string TaskDescription { get; set; }
     public string Responsible { get; set; }
     public string Status { get; set; }
-    public double Price { get; set; }
+    public double PriceAssignedTask { get; set; }
+    public double PriceCompletedTask { get; set; }
 }

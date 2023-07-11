@@ -30,7 +30,10 @@
                 <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.Responsible"></label>
             </th>
             <th>
-                <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.Price"></label>
+                <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.PriceAssignedTask"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Tasks.FirstOrDefault()!.PriceCompletedTask"></label>
             </th>
             <th>
                 <label class="align-middle">Завершить задачу</label>
@@ -46,13 +49,14 @@
                 <td class="w-10">@obj.TaskDescription</td>
                 <td class="w-10">@obj.Status</td>
                 <td class="w-20">@obj.Responsible</td>
-                <td class="w-20">@obj.Price</td>
+                <td class="w-20">@obj.PriceAssignedTask</td>
+                <td class="w-20">@obj.PriceCompletedTask</td>
                 <td class="w-20">
                     @if (obj.Status != TasksStatuses.FinishedTaskStatus)
                     {
                         <form method="post" asp-route-id="@obj.TaskId" asp-action="FinishTask" asp-controller="Tasks" enctype="multipart/form-data">
                             <input style="margin: 5px" class="btn mx-2 w-60 bg-success" value="Завершить задачу" type="submit"/>
-                        </form> 
+                        </form>
                     }
                 </td>
             </tr>

@@ -17,7 +17,10 @@
                 <label class="align-middle" asp-for="@Model.Responsible"></label>
             </th>
             <th>
-                <label class="align-middle" asp-for="@Model.Price"></label>
+                <label class="align-middle" asp-for="@Model.PriceAssignedTask"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.PriceCompletedTask"></label>
             </th>
             <th>
                 <label class="align-middle" asp-for="@Model.Status"></label>
@@ -36,7 +39,10 @@
                 <input class="align-middle" asp-for="@Model.Responsible"/>
             </td>
             <td class="w-20">
-                <label class="align-middle">@Model.Price</label>
+                <label class="align-middle">@Model.PriceAssignedTask</label>
+            </td>
+            <td class="w-20">
+                <label class="align-middle">@Model.PriceCompletedTask</label>
             </td>
             <td class="w-20">
                 <label class="align-middle">@Model.Status</label>
@@ -46,7 +52,8 @@
     </table>
     <input type="submit" value="Создать задачу"/>
     <div hidden="hidden">
-        <input asp-for="Price"/>
+        <input asp-for="PriceAssignedTask"/>
+        <input asp-for="PriceCompletedTask"/>
         <input asp-for="Status"/>
         <input asp-for="TaskId"/>
         <input asp-for="Responsible"/>

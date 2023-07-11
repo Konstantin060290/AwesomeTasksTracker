@@ -28,4 +28,24 @@ public class BrokerProducer
 
         producerBuilder.Flush(TimeSpan.FromSeconds(10));
     }
+    
+    public async Task SendTaskPriceRequest(int taskId, string eventName)
+    {
+        var priceRequest = new PriceRequest()
+        {
+            TaskId = taskId
+        };
+
+        var newAuthMessage = JsonSerializer.Serialize(priceRequest);
+
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
+        await producerBuilder.ProduceAsync(KafkaTopicNames.TaskTrackerPriceRequests, new Message<string, string>
+        {
+            Key = eventName,
+            Value = newAuthMessage
+        });
+
+        producerBuilder.Flush(TimeSpan.FromSeconds(10));
+    }
 }
