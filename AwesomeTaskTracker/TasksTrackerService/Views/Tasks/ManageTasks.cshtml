@@ -2,7 +2,7 @@
 @model TasksTrackerService.ViewModels.TasksViewModel
 
 @{
-    if (Model.UserRole == WebConstants.ManagerRole)
+    if (Model.UserRole == RoleNames.ManagerRole)
     {
         <h2>Все задачи</h2>
     }
@@ -63,7 +63,7 @@
         }
         </tbody>
     </table>
-    if (Model.UserRole == WebConstants.ManagerRole || Model.UserRole == WebConstants.AdminRole)
+    if (Model.UserRole == RoleNames.ManagerRole || Model.UserRole == RoleNames.AdminRole)
     {
         <form method="post" asp-controller="Tasks" asp-action="AssignTasks">
             <input type="submit" value="Заассайнить задачи"/>

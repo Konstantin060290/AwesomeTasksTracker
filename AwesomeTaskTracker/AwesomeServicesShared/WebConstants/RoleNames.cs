@@ -1,6 +1,6 @@
 namespace TasksTrackerService.WebConstants;
 
-public abstract class WebConstants
+public abstract class RoleNames
 {
     public const string AdminRole = "Popug-admin";
     public const string AccountantRole = "Popug-accountant";

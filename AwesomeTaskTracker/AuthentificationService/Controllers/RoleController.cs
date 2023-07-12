@@ -25,7 +25,7 @@ public class RoleController: Controller
     }
     
     [HttpGet]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public IActionResult ChangeRole(int id)
     {
         var user = _context.Users.ToList().FirstOrDefault(u=>u.Id == id);
@@ -49,7 +49,7 @@ public class RoleController: Controller
     }
     
     [HttpPost]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public async Task<IActionResult> ChangeRolePost(UserViewModel userViewModel)
     {
         var userCurrentRole = _context.UserRoles.ToList().FirstOrDefault(ur=>ur.UserId == userViewModel.UserId);
@@ -84,7 +84,7 @@ public class RoleController: Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public IActionResult EditRoles()
     {
         var roles = _context.Roles.ToList();
@@ -106,7 +106,7 @@ public class RoleController: Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public async Task<IActionResult> AddNewRole(RoleViewModel roleViewModel)
     {
         var maxId = _context.Roles.ToList().Select(r => r.Id).Max();
@@ -125,7 +125,7 @@ public class RoleController: Controller
 
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public async Task<IActionResult> EditRole(RoleViewModel model, int id)
     {
         var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);
@@ -135,7 +135,7 @@ public class RoleController: Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public async Task<IActionResult> DeleteRole(int id)
     {
         var role = _context.Roles.ToList().FirstOrDefault(r => r.Id == id);

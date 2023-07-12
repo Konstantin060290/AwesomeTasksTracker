@@ -14,8 +14,8 @@ public abstract class AdminRoleStartInitializer
 
     private static async Task AddAdminRoleToUser(UserManager<User> userManager, RoleManager<Role> roleManager)
     {
-        var admin = userManager.Users.FirstOrDefault(u => u.Email == WebConstants.AdminEmail);
-        var adminRole = roleManager.Roles.FirstOrDefault(r => r.Name == WebConstants.AdminRole);
+        var admin = userManager.Users.FirstOrDefault(u => u.Email == RoleNames.AdminEmail);
+        var adminRole = roleManager.Roles.FirstOrDefault(r => r.Name == RoleNames.AdminRole);
         await userManager.AddToRoleAsync(admin!, adminRole!.NormalizedName!);
     }
 
@@ -30,16 +30,16 @@ public abstract class AdminRoleStartInitializer
         var admin = new User
         {
             Id = 1,
-            Email = WebConstants.AdminEmail,
-            UserName = WebConstants.AdminEmail
+            Email = RoleNames.AdminEmail,
+            UserName = RoleNames.AdminEmail
         };
 
-        await userManager.CreateAsync(admin, WebConstants.AdminEmail);
+        await userManager.CreateAsync(admin, RoleNames.AdminEmail);
     }
 
     private static async Task AddAdminRoleToDb(RoleManager<Role> roleManager)
     {
-        var adminRole = roleManager.Roles.ToList().FirstOrDefault(r => r.Name == WebConstants.AdminRole);
+        var adminRole = roleManager.Roles.ToList().FirstOrDefault(r => r.Name == RoleNames.AdminRole);
 
         if (adminRole is not null)
         {
@@ -56,9 +56,9 @@ public abstract class AdminRoleStartInitializer
         var newAdmin = new Role
         {
             Id = newId,
-            Name = WebConstants.AdminRole,
-            ConcurrencyStamp = WebConstants.AdminRole,
-            NormalizedName = WebConstants.AdminRole
+            Name = RoleNames.AdminRole,
+            ConcurrencyStamp = RoleNames.AdminRole,
+            NormalizedName = RoleNames.AdminRole
         };
 
         await roleManager.CreateAsync(newAdmin);

@@ -46,7 +46,7 @@ public class TasksController : Controller
         };
 
         var tasks = _context.PopTasks.Select(t => t).ToList();
-        if (userRoleName is WebConstants.WebConstants.AdminRole or WebConstants.WebConstants.ManagerRole)
+        if (userRoleName is WebConstants.RoleNames.AdminRole or WebConstants.RoleNames.ManagerRole)
         {
             if (tasks.Count > 0)
             {
@@ -170,7 +170,7 @@ public class TasksController : Controller
         {
             return Unauthorized("Попуг не аутентифицирован");
         }
-        if (userRoleName is WebConstants.WebConstants.AdminRole or WebConstants.WebConstants.ManagerRole)
+        if (userRoleName is WebConstants.RoleNames.AdminRole or WebConstants.RoleNames.ManagerRole)
         {
             var tasks = _context.PopTasks.ToList().Where(t=>t.Status!= WebConstants.TasksStatuses.FinishedTaskStatus);
             var users = _context.Users.ToArray();
@@ -198,7 +198,7 @@ public class TasksController : Controller
         {
             return Unauthorized("Попуг не аутентифицирован");
         }
-        if (userRoleName is WebConstants.WebConstants.AdminRole or WebConstants.WebConstants.ManagerRole)
+        if (userRoleName is WebConstants.RoleNames.AdminRole or WebConstants.RoleNames.ManagerRole)
         {
             var tasks = _context.PopTasks.ToList();
 

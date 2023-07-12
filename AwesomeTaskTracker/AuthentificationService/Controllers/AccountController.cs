@@ -132,7 +132,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public IActionResult ManageUsers()
     {
         var users = _context.Users.ToList();
@@ -167,7 +167,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    [Authorize(Roles = WebConstants.AdminRole)]
+    [Authorize(Roles = RoleNames.AdminRole)]
     public async Task<IActionResult> RemoveUser(int id)
     {
         var userRole = _context.UserRoles.ToList().FirstOrDefault(ur => ur.UserId == id);

@@ -8,4 +8,6 @@ public class Bill
     public int BillId { get; set; }
     public int UserId { get; set; }
     public decimal Balance { get; set; }
+
+    public string Status { get; set; } = "";
 }

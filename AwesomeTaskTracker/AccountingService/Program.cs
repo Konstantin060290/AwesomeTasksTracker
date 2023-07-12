@@ -11,6 +11,7 @@ builder.Services.AddDbContext<ApplicationContext>(o=>o
     .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPriceRequestsConsumer, PriceRequestsRequestsConsumer>();
+builder.Services.AddScoped<IUserConsumer, UserConsumer>();
 
 var app = builder.Build();
 
@@ -32,6 +33,7 @@ app.UseAuthorization();
 var scope = app.Services.CreateScope();
 
 scope.ServiceProvider.GetService<IPriceRequestsConsumer>();
+scope.ServiceProvider.GetService<IUserConsumer>();
 
 app.MapControllerRoute(
     name: "default",

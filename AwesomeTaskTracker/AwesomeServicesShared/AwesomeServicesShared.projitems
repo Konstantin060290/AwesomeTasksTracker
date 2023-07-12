@@ -11,10 +11,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BrokerCommon\ConsumerCommon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BrokerCommon\ProducerCommon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebConstants\BillStatuses.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\EventsNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaConsumeGroupsNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\KafkaTopicNames.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WebConstants\TasksStatuses.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WebConstants\WebConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebConstants\RoleNames.cs" />
   </ItemGroup>
 </Project>

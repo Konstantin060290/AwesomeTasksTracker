@@ -1,12 +1,12 @@
 using System.Text.Json;
+using AccountingService.Context;
+using AccountingService.Models;
 using Confluent.Kafka;
 using TasksTrackerService.BrokerCommon;
-using TasksTrackerService.Context;
-using TasksTrackerService.Models;
 using TasksTrackerService.WebConstants;
 using Task = System.Threading.Tasks.Task;
 
-namespace TasksTrackerService.BrokerExchange;
+namespace AccountingService.BrokerExchange;
 
 public class UserConsumer : IUserConsumer
 {
@@ -25,7 +25,7 @@ public class UserConsumer : IUserConsumer
 
     private async void Listen()
     {
-        using var builder = ConsumerCommon.BuildConsumer(KafkaConsumeGroupsNames.TaskTrackerUserConsumer);
+        using var builder = ConsumerCommon.BuildConsumer(KafkaConsumeGroupsNames.AccountingUserConsumer);
 
         builder.Subscribe(KafkaTopicNames.Account);
 
@@ -73,8 +73,21 @@ public class UserConsumer : IUserConsumer
     {
         var user = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
         _context.Users.Add(user!);
+        CreateUserBill(user!);
         await _context.SaveChangesAsync(cts.Token);
     }
+
+    private void CreateUserBill(User user)
+    {
+        var userBill = new Bill
+        {
+            UserId = user!.UserId,
+            Balance = 0,
+            Status = BillStatuses.Active
+        };
+        _context.Bills.Add(userBill);
+    }
+
     private async Task ChangeUserInDb(ConsumeResult<string, string> consumeResult, CancellationTokenSource cts)
     {
         var changedUser = JsonSerializer.Deserialize<User>(consumeResult.Message.Value);
@@ -102,6 +115,11 @@ public class UserConsumer : IUserConsumer
         if (existedUser is not null)
         {
             _context.Users.Remove(existedUser);
+        }
+        var bill = _context.Bills.FirstOrDefault(b => b.UserId == changedUser.UserId);
+        if (bill is not null)
+        {
+            _context.Bills.Remove(bill);   
         }
         await _context.SaveChangesAsync(cts.Token);
     }

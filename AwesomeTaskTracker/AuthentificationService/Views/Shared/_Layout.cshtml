@@ -38,7 +38,7 @@
                         }
                     </div>
 
-                    @if (User.IsInRole(WebConstants.AdminRole))
+                    @if (User.IsInRole(RoleNames.AdminRole))
                     {
                         <div class="col-4" role="group">
                             <a class="btn btn-primary mx-2" asp-controller="Role" asp-action="EditRoles">Править роли</a>
