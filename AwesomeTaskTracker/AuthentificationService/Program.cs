@@ -22,13 +22,15 @@ builder.Services.AddIdentity<User, Role>(opts=> {
     })
     .AddEntityFrameworkStores<ApplicationContext>();
 
-builder.Services.AddScoped<IAuthenticateConsumer, AuthenticateConsumer>();
+builder.Services.AddScoped<IAuthenticateTaskTrackerConsumer, AuthenticateTaskTrackerConsumer>();
+builder.Services.AddScoped<IAuthenticateAccountingConsumer, AuthenticateAccountingConsumer>();
 
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 
-scope.ServiceProvider.GetService<IAuthenticateConsumer>();
+scope.ServiceProvider.GetService<IAuthenticateTaskTrackerConsumer>();
+scope.ServiceProvider.GetService<IAuthenticateAccountingConsumer>();
 
 var roleManager = scope.ServiceProvider.GetService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetService<UserManager<User>>();

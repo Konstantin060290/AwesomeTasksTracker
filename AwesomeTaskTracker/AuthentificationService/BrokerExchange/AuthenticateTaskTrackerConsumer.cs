@@ -1,23 +1,14 @@
 using System.Text;
-using AuthentificationService.Models;
 using Confluent.Kafka;
-using Microsoft.AspNetCore.Identity;
 using TasksTrackerService.BrokerCommon;
 using TasksTrackerService.WebConstants;
 
 namespace AuthentificationService.BrokerExchange;
 
-public class AuthenticateConsumer : IAuthenticateConsumer
+public class AuthenticateTaskTrackerConsumer : IAuthenticateTaskTrackerConsumer
 {
-    private readonly ApplicationContext _context;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IHttpContextAccessor _contextAccessor;
-
-    public AuthenticateConsumer(ApplicationContext context, SignInManager<User> signInManager, IHttpContextAccessor contextAccessor)
+    public AuthenticateTaskTrackerConsumer()
     {
-        _context = context;
-        _signInManager = signInManager;
-        _contextAccessor = contextAccessor;
         ConsumeAuthenticate();
     }
 
@@ -45,22 +36,10 @@ public class AuthenticateConsumer : IAuthenticateConsumer
                 try
                 {
                     var consumeResult = builder.Consume(cts.Token);
+
                     if (consumeResult.Message.Key == EventsNames.UserAuthenticateRequest)
                     {
-                        if (Uri.TryCreate(new Uri("http://localhost:5154", UriKind.Absolute), $"AuthenticateBroker/AuthenticateUser", out var uri))
-                        {
-                            var client = new HttpClient();
-                        
-                            var stringContent = new StringContent(consumeResult.Message.Value, Encoding.UTF8, "application/json");
-                        
-                            var response = await client.PostAsync(uri, stringContent, cts.Token);
-                        
-                            response.EnsureSuccessStatusCode();
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("Failed to compose address for sending documents data");
-                        }
+                        await AuthenticateTaskTracker(consumeResult, cts);
                     }
                 }
                 catch (ConsumeException e)
@@ -75,9 +54,30 @@ public class AuthenticateConsumer : IAuthenticateConsumer
             builder.Close();
         }
     }
+
+    private static async Task AuthenticateTaskTracker(ConsumeResult<string, string> consumeResult,
+        CancellationTokenSource cts)
+    {
+        if (Uri.TryCreate(new Uri("http://localhost:5154", UriKind.Absolute),
+                $"AuthenticateBroker/AuthenticateUserInTaskTracker", out var uri))
+        {
+            var client = new HttpClient();
+
+            var stringContent = new StringContent(consumeResult.Message.Value, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(uri, stringContent, cts.Token);
+
+            response.EnsureSuccessStatusCode();
+        }
+        else
+        {
+            throw new InvalidOperationException("Failed to compose address for sending documents data");
+        }
+    }
+
 }
 
-public interface IAuthenticateConsumer
+public interface IAuthenticateTaskTrackerConsumer
 {
     void ConsumeAuthenticate();
 }

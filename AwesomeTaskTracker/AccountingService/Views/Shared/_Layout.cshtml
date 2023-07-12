@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using System.Runtime.Caching
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using TasksTrackerService.WebConstants
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -18,11 +21,38 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                </ul>
+                <div role="group">
+                    @{
+                        var auth = false;
+                        var userEmail = "";
+                        try
+                        {
+                            auth = ((Dictionary<string, bool>)MemoryCache.Default.Get(EventsNames.UserAuthenticated)).FirstOrDefault().Value;
+                            userEmail = ((Dictionary<string, bool>)MemoryCache.Default.Get(EventsNames.UserAuthenticated)).FirstOrDefault().Key;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                    }
+                    @if (auth)
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <input type="submit" value="Выйти, @userEmail"/>
+                                </form>
+                            </li>
+                            @* <li class="nav-item"> *@
+                            @*     <a class="btn btn-primary mx-2" asp-route-email="@userEmail" asp-controller="Tasks" asp-action="ManageTasks">Управление задачами</a> *@
+                            @* </li> *@
+                        </ul>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary mx-2" asp-controller="Account" asp-action="Login">Войти</a>
+                    }
+                </div>
             </div>
         </div>
     </nav>

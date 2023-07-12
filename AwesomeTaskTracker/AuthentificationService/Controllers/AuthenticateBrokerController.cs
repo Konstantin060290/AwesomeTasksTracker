@@ -20,7 +20,7 @@ public class AuthenticateBrokerController : Controller
     
     [HttpPost]
     [AllowAnonymous]
-    public async Task AuthenticateUser([FromBody]UserAuthentification? userMessage, CancellationTokenSource cts)
+    public async Task AuthenticateUserInTaskTracker([FromBody]UserAuthentification? userMessage, CancellationTokenSource cts)
     {
         if (userMessage is null)
         {
@@ -30,11 +30,31 @@ public class AuthenticateBrokerController : Controller
             userMessage.UserPassword, false, false);
         if (result.Succeeded)
         {
-            await _brokerProducer.SendAuthConfirm(userMessage.UserEmail, EventsNames.UserAuthenticated);
+            await _brokerProducer.SendAuthTaskTrackerConfirm(userMessage.UserEmail, EventsNames.UserAuthenticated);
         }
         else
         {
-            await _brokerProducer.SendAuthConfirm(userMessage.UserEmail, EventsNames.UserNotAuthenticated);
+            await _brokerProducer.SendAuthTaskTrackerConfirm(userMessage.UserEmail, EventsNames.UserNotAuthenticated);
+        }
+    }
+    
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task AuthenticateUserInAccounting([FromBody]UserAuthentification? userMessage, CancellationTokenSource cts)
+    {
+        if (userMessage is null)
+        {
+            return;
+        }
+        var result = await _signInManager.PasswordSignInAsync(userMessage.UserEmail,
+            userMessage.UserPassword, false, false);
+        if (result.Succeeded)
+        {
+            await _brokerProducer.SendAuthAccountingConfirm(userMessage.UserEmail, EventsNames.UserAuthenticated);
+        }
+        else
+        {
+            await _brokerProducer.SendAuthAccountingConfirm(userMessage.UserEmail, EventsNames.UserNotAuthenticated);
         }
     }
 }

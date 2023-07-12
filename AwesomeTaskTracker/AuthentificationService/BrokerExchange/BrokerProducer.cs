@@ -29,7 +29,7 @@ public class BrokerProducer
         producerBuilder.Flush(TimeSpan.FromSeconds(10));
     }
 
-    public async Task SendAuthConfirm(string userEmail, string eventName)
+    public async Task SendAuthTaskTrackerConfirm(string userEmail, string eventName)
     {
         var authConfirmMessage = new AuthConfirm
         {
@@ -41,6 +41,26 @@ public class BrokerProducer
         var producerBuilder = ProducerCommon.BuildProducer();
         
         await producerBuilder.ProduceAsync(KafkaTopicNames.TaskTrackerAuthAnswers, new Message<string, string>
+        {
+            Key = eventName,
+            Value = message
+        });
+
+        producerBuilder.Flush(TimeSpan.FromSeconds(10));
+    }
+    
+    public async Task SendAuthAccountingConfirm(string userEmail, string eventName)
+    {
+        var authConfirmMessage = new AuthConfirm
+        {
+            UserEmail = userEmail
+        };
+
+        var message = JsonSerializer.Serialize(authConfirmMessage);
+        
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
+        await producerBuilder.ProduceAsync(KafkaTopicNames.AccountingAuthAnswers, new Message<string, string>
         {
             Key = eventName,
             Value = message
