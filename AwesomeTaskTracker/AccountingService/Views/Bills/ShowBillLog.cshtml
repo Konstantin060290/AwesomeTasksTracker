@@ -1,0 +1,47 @@
+@model AccountingService.ViewModels.BillViewModel
+
+@{
+    if (Model.TransactionViewModels.Count > 0)
+    {
+        <label class="mx-2">BillId: @Model.BillId</label>
+        <label class="mx-2">Status: @Model.Status</label>
+        <label class="mx-2">Balance: @Model.Balance</label>
+        <label class="mx-2">Email: @Model.UserEmail</label>
+                                                   
+        <table name="MainTable" class="table table-bordered table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>
+                    <label class="align-middle" asp-for="@Model.TransactionViewModels.First().TransactionId"></label>
+                </th>
+                <th>
+                    <label class="align-middle" asp-for="@Model.TransactionViewModels.First().Accrued"></label>
+                </th>
+                <th>
+                    <label class="align-middle" asp-for="@Model.TransactionViewModels.First().WrittenOff"></label>
+                </th>
+                <th>
+                    <label class="align-middle" asp-for="@Model.TransactionViewModels.First().TaskDescription"></label>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var obj in Model.TransactionViewModels)
+            {
+                <tr class="ta">
+                    <td class="w-10">@obj.TransactionId</td>
+                    <td class="w-10">@obj.Accrued</td>
+                    <td class="w-10">@obj.WrittenOff</td>
+                    <td class="w-20">@obj.TaskDescription</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <label>По данному счёту отсутствуют транзакции</label>
+    }
+}
+

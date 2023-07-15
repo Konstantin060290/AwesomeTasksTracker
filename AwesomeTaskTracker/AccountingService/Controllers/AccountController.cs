@@ -1,5 +1,6 @@
 using System.Runtime.Caching;
 using AccountingService.BrokerExchange;
+using AccountingService.Context;
 using AccountingService.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using TasksTrackerService.WebConstants;
@@ -8,10 +9,12 @@ namespace AccountingService.Controllers;
 
 public class AccountController : Controller
 {
+    private readonly ApplicationContext _context;
     private readonly BrokerProducer _brokerProducer;
 
-    public AccountController()
+    public AccountController(ApplicationContext context)
     {
+        _context = context;
         _brokerProducer = new BrokerProducer();
     }
 

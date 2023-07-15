@@ -1,0 +1,63 @@
+@using TasksTrackerService.WebConstants
+@model AccountingService.ViewModels.BillsViewModel
+
+@{
+    if (Model.UserRole == RoleNames.AccountantRole)
+    {
+        <h2>Все счета</h2>
+    }
+    else if (Model.UserRole == RoleNames.AdminRole)
+    {
+        <h2>Все счета</h2>
+    }
+    else
+    {
+        <h2>Мои счета</h2>
+    }
+}
+
+@if (Model.Bills.Any())
+{
+    <table name="MainTable" class="table table-bordered table table-striped" style="width:100%">
+        <thead>
+        <tr>
+            <th>
+                <label class="align-middle" asp-for="@Model.Bills.FirstOrDefault()!.BillId"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Bills.FirstOrDefault()!.UserEmail"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Bills.FirstOrDefault()!.Balance"></label>
+            </th>
+            <th>
+                <label class="align-middle" asp-for="@Model.Bills.FirstOrDefault()!.Status"></label>
+            </th>
+            <th>
+                <label class="align-middle">Посмотреть лог счёта</label>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach (var obj in Model.Bills)
+        {
+            <tr class="ta">
+                <td class="w-10">@obj.BillId</td>
+                <td class="w-10">@obj.UserEmail</td>
+                <td class="w-10">@obj.Balance</td>
+                <td class="w-20">@obj.Status</td>
+                <td class="w-20">
+                    <form method="get" asp-route-billId="@obj.BillId" asp-action="ShowBillLog" asp-controller="Bills" enctype="multipart/form-data">
+                        <input style="margin: 5px" class="btn mx-2 w-60 bg-success" value="Посмотреть лог счёта" type="submit"/>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Нет счетов</p>
+}
