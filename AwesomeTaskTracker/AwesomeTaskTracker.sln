@@ -8,6 +8,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AwesomeServicesShared", "Aw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingService", "AccountingService\AccountingService.csproj", "{E50C9608-9D5D-479B-BDD3-075AD00FBBD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingServiceTests", "AccountingServiceTests\AccountingServiceTests.csproj", "{75BCD1C5-D6A5-4307-AD70-F1A651293A6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,5 +28,9 @@ Global
 		{E50C9608-9D5D-479B-BDD3-075AD00FBBD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E50C9608-9D5D-479B-BDD3-075AD00FBBD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E50C9608-9D5D-479B-BDD3-075AD00FBBD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75BCD1C5-D6A5-4307-AD70-F1A651293A6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75BCD1C5-D6A5-4307-AD70-F1A651293A6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75BCD1C5-D6A5-4307-AD70-F1A651293A6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75BCD1C5-D6A5-4307-AD70-F1A651293A6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

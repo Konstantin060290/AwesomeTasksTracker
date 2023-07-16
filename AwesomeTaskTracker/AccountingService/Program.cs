@@ -1,5 +1,6 @@
 using AccountingService.BrokerExchange;
 using AccountingService.Context;
+using AccountingService.MoneyWorker;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<ApplicationContext>(o=>o
 builder.Services.AddScoped<IPriceRequestsConsumer, PriceRequestsRequestsConsumer>();
 builder.Services.AddScoped<IUserConsumer, UserConsumer>();
 builder.Services.AddScoped<ITransactionsConsumer, TransactionsConsumer>();
+builder.Services.AddScoped<IMoneyWorker, MoneyWorker>();
 
 var app = builder.Build();
 
@@ -36,6 +38,7 @@ var scope = app.Services.CreateScope();
 scope.ServiceProvider.GetService<IPriceRequestsConsumer>();
 scope.ServiceProvider.GetService<IUserConsumer>();
 scope.ServiceProvider.GetService<ITransactionsConsumer>();
+scope.ServiceProvider.GetService<IMoneyWorker>();
 
 app.MapControllerRoute(
     name: "default",
