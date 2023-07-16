@@ -2,6 +2,7 @@ using System.Text.Json;
 using Confluent.Kafka;
 using TasksTrackerService.BrokerCommon;
 using TasksTrackerService.BrokerExchange.Contracts;
+using TasksTrackerService.Models;
 using TasksTrackerService.WebConstants;
 
 namespace TasksTrackerService.BrokerExchange;
@@ -44,6 +45,36 @@ public class BrokerProducer
         {
             Key = eventName,
             Value = newAuthMessage
+        });
+
+        producerBuilder.Flush(TimeSpan.FromSeconds(10));
+    }
+    
+    public async Task SendCreatedTaskTransaction(PopTask task, string eventName)
+    {
+        var serializedTask = JsonSerializer.Serialize(task);
+
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
+        await producerBuilder.ProduceAsync(KafkaTopicNames.TaskTransactions, new Message<string, string>
+        {
+            Key = eventName,
+            Value = serializedTask
+        });
+
+        producerBuilder.Flush(TimeSpan.FromSeconds(10));
+    }
+    
+    public async Task SendFinishedTaskTransaction(PopTask task, string eventName)
+    {
+        var serializedTask = JsonSerializer.Serialize(task);
+
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
+        await producerBuilder.ProduceAsync(KafkaTopicNames.TaskTransactions, new Message<string, string>
+        {
+            Key = eventName,
+            Value = serializedTask
         });
 
         producerBuilder.Flush(TimeSpan.FromSeconds(10));

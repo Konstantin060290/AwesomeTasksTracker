@@ -5,6 +5,7 @@ using TasksTrackerService.BrokerExchange;
 using TasksTrackerService.Context;
 using TasksTrackerService.Models;
 using TasksTrackerService.ViewModels;
+using TasksTrackerService.WebConstants;
 
 namespace TasksTrackerService.Controllers;
 
@@ -137,7 +138,6 @@ public class TasksController : Controller
             viewModel.PriceCompletedTask = "0"; 
         }
 
-        
         return View(viewModel);
     }
     
@@ -159,6 +159,8 @@ public class TasksController : Controller
         };
         await _context.PopTasks.AddAsync(task);
         await _context.SaveChangesAsync();
+        await _brokerProducer.SendCreatedTaskTransaction(_context.PopTasks.FirstOrDefault(t => t.Id == task.Id)!,
+            EventsNames.MoneyWrittenOff);
         
         return RedirectToAction("ManageTasks", new { email = userEmail });
     }
@@ -170,9 +172,9 @@ public class TasksController : Controller
         {
             return Unauthorized("Попуг не аутентифицирован");
         }
-        if (userRoleName is WebConstants.RoleNames.AdminRole or WebConstants.RoleNames.ManagerRole)
+        if (userRoleName is RoleNames.AdminRole or RoleNames.ManagerRole)
         {
-            var tasks = _context.PopTasks.ToList().Where(t=>t.Status!= WebConstants.TasksStatuses.FinishedTaskStatus);
+            var tasks = _context.PopTasks.ToList().Where(t=>t.Status!= TasksStatuses.FinishedTaskStatus).ToList();
             var users = _context.Users.ToArray();
         
             foreach (var task in tasks)
@@ -183,6 +185,12 @@ public class TasksController : Controller
             }
         
             await _context.SaveChangesAsync();
+            
+            foreach (var task in tasks)
+            {
+                await _brokerProducer.SendCreatedTaskTransaction(task,
+                    EventsNames.MoneyWrittenOff);
+            }
 
             return RedirectToAction("ManageTasks", new { email = userEmail });
 
@@ -198,15 +206,17 @@ public class TasksController : Controller
         {
             return Unauthorized("Попуг не аутентифицирован");
         }
-        if (userRoleName is WebConstants.RoleNames.AdminRole or WebConstants.RoleNames.ManagerRole)
+        if (userRoleName is RoleNames.AdminRole or RoleNames.ManagerRole)
         {
             var tasks = _context.PopTasks.ToList();
 
             var taskForFinish = tasks.FirstOrDefault(t => t.Id == id);
 
-            taskForFinish!.Status = WebConstants.TasksStatuses.FinishedTaskStatus;
+            taskForFinish!.Status = TasksStatuses.FinishedTaskStatus;
 
             await _context.SaveChangesAsync();
+
+            await _brokerProducer.SendFinishedTaskTransaction(taskForFinish, EventsNames.MoneyAccrued);
 
             return RedirectToAction("ManageTasks", new { email = userEmail });
 

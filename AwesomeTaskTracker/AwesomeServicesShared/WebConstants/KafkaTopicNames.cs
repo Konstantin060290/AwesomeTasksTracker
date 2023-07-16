@@ -15,4 +15,6 @@ public abstract class KafkaTopicNames
     public const string TaskTrackerPriceRequests = "TaskTrackerPriceRequests";
     
     public const string TaskTrackerPriceAnswers = "TaskTrackerPriceAnswers";
+    
+    public const string TaskTransactions = "TaskTransactions";
 }

@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ApplicationContext>(o=>o
 
 builder.Services.AddScoped<IPriceRequestsConsumer, PriceRequestsRequestsConsumer>();
 builder.Services.AddScoped<IUserConsumer, UserConsumer>();
+builder.Services.AddScoped<ITransactionsConsumer, TransactionsConsumer>();
 
 var app = builder.Build();
 
@@ -34,6 +35,7 @@ var scope = app.Services.CreateScope();
 
 scope.ServiceProvider.GetService<IPriceRequestsConsumer>();
 scope.ServiceProvider.GetService<IUserConsumer>();
+scope.ServiceProvider.GetService<ITransactionsConsumer>();
 
 app.MapControllerRoute(
     name: "default",

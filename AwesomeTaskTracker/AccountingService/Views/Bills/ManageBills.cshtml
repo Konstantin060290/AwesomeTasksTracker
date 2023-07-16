@@ -48,7 +48,7 @@
                 <td class="w-10">@obj.Balance</td>
                 <td class="w-20">@obj.Status</td>
                 <td class="w-20">
-                    <form method="get" asp-route-billId="@obj.BillId" asp-action="ShowBillLog" asp-controller="Bills" enctype="multipart/form-data">
+                    <form method="post" asp-route-billId="@obj.BillId" asp-action="ShowBillLog" asp-controller="Bills" enctype="multipart/form-data">
                         <input style="margin: 5px" class="btn mx-2 w-60 bg-success" value="Посмотреть лог счёта" type="submit"/>
                     </form>
                 </td>

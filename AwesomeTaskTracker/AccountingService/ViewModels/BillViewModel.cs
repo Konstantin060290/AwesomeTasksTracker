@@ -19,4 +19,6 @@ public class TransactionViewModel
     public decimal Accrued { get; set; }
     public decimal WrittenOff { get; set; }
     public string TaskDescription { get; set; } = "";
+    
+    public DateTime TransactionDate { get; set; }
 }

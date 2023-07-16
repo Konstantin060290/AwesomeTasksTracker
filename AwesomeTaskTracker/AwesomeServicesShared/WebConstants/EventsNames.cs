@@ -17,4 +17,8 @@ public static class EventsNames
     public const string PriceWasRequested = "PriceWasRequested";
     
     public const string PriceWasCalculated = "PriceWasCalculated";
+    
+    public const string MoneyWrittenOff = "MoneyWrittenOff";
+    
+    public const string MoneyAccrued = "MoneyAccrued";
 }

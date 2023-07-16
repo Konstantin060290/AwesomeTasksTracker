@@ -87,8 +87,9 @@ public class BillsController : Controller
             viewModel.Bills.Add(billViewModel);
         }
     }
-
-    [HttpGet]
+    
+    //На самом деле это GET, но через него не прокинуть billId
+    [HttpPost]
     public IActionResult ShowBillLog(int billId)
     {
         if (!AuthChecker.IsUserAuthenticated(_context, out var userRoleName, out var userEmail))
@@ -97,13 +98,18 @@ public class BillsController : Controller
         }
 
         var bill = _context.Bills.FirstOrDefault(b => b.BillId == billId);
+        var user = _context.Users.FirstOrDefault(u => u.UserId == bill!.UserId);
         var billViewModel = new BillViewModel();
         if (bill is not null)
         {
             billViewModel.BillId = bill.BillId;
             billViewModel.Status = bill.Status;
-            billViewModel.UserEmail = userEmail!;
             billViewModel.Balance = bill.Balance;
+        }
+
+        if (user is not null)
+        {
+            billViewModel.UserEmail = user.Email;
         }
 
         var transactions = _context.Transactions.ToList().Where(t => t.BillId == billId).ToList();
@@ -116,10 +122,11 @@ public class BillsController : Controller
                 TransactionId = transaction.TransactionId,
                 BillId = transaction.BillId,
                 Accrued = transaction.Accrued,
-                WrittenOff = transaction.WrittenOff
+                WrittenOff = transaction.WrittenOff,
+                TaskDescription = transaction.TaskDescription,
+                TransactionDate = transaction.TransactionDate
             });
         }
-        //TODO добавить запрос TaskDescription из таск трекера
         
         return View(billViewModel);
     }
