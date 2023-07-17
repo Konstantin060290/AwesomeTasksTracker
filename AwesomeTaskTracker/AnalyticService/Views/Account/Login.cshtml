@@ -1,0 +1,17 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AnalyticService.ViewModels.LoginViewModel
+
+<h2>Аутентификация попуга</h2>
+
+<form method="post" asp-controller="Account" asp-action="Login">
+
+    <div style="margin: 10px">
+        <label asp-for="Email"></label>
+        <input asp-for="Email"/>
+    </div>
+    <div style="margin: 10px">
+        <label asp-for="BeakShape"></label>
+        <input asp-for="BeakShape"/>
+    </div>
+    <input style="margin: 10px" class="btn btn-primary mx-2" type="submit" value="Login"/>
+</form>

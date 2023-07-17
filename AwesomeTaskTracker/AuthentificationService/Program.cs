@@ -24,6 +24,7 @@ builder.Services.AddIdentity<User, Role>(opts=> {
 
 builder.Services.AddScoped<IAuthenticateTaskTrackerConsumer, AuthenticateTaskTrackerConsumer>();
 builder.Services.AddScoped<IAuthenticateAccountingConsumer, AuthenticateAccountingConsumer>();
+builder.Services.AddScoped<IAuthenticateAnalyticConsumer, AuthenticateAnalyticConsumer>();
 
 var app = builder.Build();
 
@@ -31,6 +32,7 @@ var scope = app.Services.CreateScope();
 
 scope.ServiceProvider.GetService<IAuthenticateTaskTrackerConsumer>();
 scope.ServiceProvider.GetService<IAuthenticateAccountingConsumer>();
+scope.ServiceProvider.GetService<IAuthenticateAnalyticConsumer>();
 
 var roleManager = scope.ServiceProvider.GetService<RoleManager<Role>>();
 var userManager = scope.ServiceProvider.GetService<UserManager<User>>();

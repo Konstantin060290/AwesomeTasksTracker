@@ -12,6 +12,10 @@ public abstract class KafkaTopicNames
     
     public const string AccountingAuthAnswers = "AccountingAuthAnswers";
     
+    public const string AnalyticAuthRequests = "AnalyticAuthRequests";
+    
+    public const string AnalyticAuthAnswers = "AnalyticAuthAnswers";
+    
     public const string TaskTrackerPriceRequests = "TaskTrackerPriceRequests";
     
     public const string TaskTrackerPriceAnswers = "TaskTrackerPriceAnswers";

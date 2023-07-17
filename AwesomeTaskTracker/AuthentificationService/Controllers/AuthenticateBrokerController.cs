@@ -57,4 +57,24 @@ public class AuthenticateBrokerController : Controller
             await _brokerProducer.SendAuthAccountingConfirm(userMessage.UserEmail, EventsNames.UserNotAuthenticated);
         }
     }
+    
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task AuthenticateUserInAnalytic([FromBody]UserAuthentification? userMessage, CancellationTokenSource cts)
+    {
+        if (userMessage is null)
+        {
+            return;
+        }
+        var result = await _signInManager.PasswordSignInAsync(userMessage.UserEmail,
+            userMessage.UserPassword, false, false);
+        if (result.Succeeded)
+        {
+            await _brokerProducer.SendAuthAnalyticConfirm(userMessage.UserEmail, EventsNames.UserAuthenticated);
+        }
+        else
+        {
+            await _brokerProducer.SendAuthAnalyticConfirm(userMessage.UserEmail, EventsNames.UserNotAuthenticated);
+        }
+    }
 }
