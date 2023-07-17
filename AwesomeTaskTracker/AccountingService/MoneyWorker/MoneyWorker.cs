@@ -1,16 +1,20 @@
 using System.Globalization;
 using AccountingService.Context;
 using AccountingService.Mail;
+using AccountingService.Settings;
+using Microsoft.Extensions.Options;
 
 namespace AccountingService.MoneyWorker;
 
 public class MoneyWorker : IMoneyWorker
 {
     private readonly ApplicationContext _context;
+    private readonly IOptions<MailSettings> _mailSettings;
 
-    public MoneyWorker(ApplicationContext context)
+    public MoneyWorker(ApplicationContext context, IOptions<MailSettings> mailSettings)
     {
         _context = context;
+        _mailSettings = mailSettings;
         ManageTransactions();
     }
 
@@ -49,7 +53,7 @@ public class MoneyWorker : IMoneyWorker
                         bill!.Balance += sum;
                         await _context.SaveChangesAsync();
                         
-                        var mailSender = new MailSender();
+                        var mailSender = new MailSender(_mailSettings);
                         mailSender.SendMail(userMail, sum.ToString(CultureInfo.InvariantCulture));
                     }
                 }

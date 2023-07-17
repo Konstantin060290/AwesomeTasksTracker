@@ -1,63 +1,33 @@
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Net.Mail;
+using AccountingService.Settings;
+using Microsoft.Extensions.Options;
 
 namespace AccountingService.Mail;
 
 public class MailSender
 {
-    public async void SendMail(string userMail, string sum)
-    {
-        var client = new MailjetClient("",
-            "");
+    private readonly MailSettings _mailSettings;
 
-        var request = new MailjetRequest
-            {
-                Resource = Send.Resource,
-                
-            }
-            .Property(Send.Messages, new JArray
-            {
-                new JObject
-                {
-                    {
-                        "From",
-                        new JObject
-                        {
-                            { "Email", "rfrsk@yandex.ru" },
-                            { "Name", "AccountingService" }
-                        }
-                    },
-                    {
-                        "To",
-                        new JArray
-                        {
-                            new JObject
-                            {
-                                {
-                                    "Email", userMail
-                                },
-                                {
-                                    "Name",
-                                    "User"
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "Subject",
-                        "Выплата денег"
-                    },
-                    {
-                        "HTMLPart",
-                        $"Вам выплачено: {sum}"
-                    },
-                }
-            });
-        var response = client.PostAsync(request);
-        if (response.IsCompleted)
-        {
-            
-        }
+    public MailSender(IOptions<MailSettings> mailSettings)
+    {
+        _mailSettings = mailSettings.Value;
+    }
+    public void SendMail(string userMail, string sum)
+    {
+        var mail = new MailMessage();
+        mail.From = new MailAddress("rfrsk@yandex.ru"); // Адрес отправителя
+        mail.To.Add(new MailAddress(userMail)); // Адрес получателя
+        mail.Subject = "Попуг, Ваша выплата";
+        mail.Body = $"За сегодня Вы заработали {sum}";
+
+        var client = new SmtpClient();
+        client.Host = "smtp.yandex.ru";
+        client.Port = 587; // Обратите внимание что порт 587
+        client.EnableSsl = true;
+        client.Credentials = new NetworkCredential(_mailSettings.ServiceEmail, _mailSettings.Password); // Ваши логин и пароль
+        client.Send(mail);
+
+        Console.ReadKey();
     }
 }

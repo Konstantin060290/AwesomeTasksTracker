@@ -1,6 +1,7 @@
 using AccountingService.BrokerExchange;
 using AccountingService.Context;
 using AccountingService.MoneyWorker;
+using AccountingService.Settings;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Services.AddScoped<IPriceRequestsConsumer, PriceRequestsRequestsConsumer
 builder.Services.AddScoped<IUserConsumer, UserConsumer>();
 builder.Services.AddScoped<ITransactionsConsumer, TransactionsConsumer>();
 builder.Services.AddScoped<IMoneyWorker, MoneyWorker>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 
 var app = builder.Build();
 
@@ -28,7 +30,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthorization();
