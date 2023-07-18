@@ -10,6 +10,8 @@ public static class KafkaConsumeGroupsNames
     
     public const string AnalyticUserConsumer = "AnalyticUserConsumer";
     
+    public const string AnalyticConsumer = "AnalyticConsumer";
+    
     public const string PriceConsumer = "PriceConsumer";
     
     public const string TransactionsConsumer = "TransactionsConsumer";

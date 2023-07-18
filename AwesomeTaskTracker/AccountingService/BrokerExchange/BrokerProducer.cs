@@ -50,4 +50,19 @@ public class BrokerProducer
 
         producerBuilder.Flush(TimeSpan.FromSeconds(10));
     }
+    
+    public async Task SendAnalyticAnswer(AnalyticAnswer analyticAnswer, string eventName)
+    {
+        var message = JsonSerializer.Serialize(analyticAnswer);
+
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
+        await producerBuilder.ProduceAsync(KafkaTopicNames.AnalyticAnswers, new Message<string, string>
+        {
+            Key = eventName,
+            Value = message
+        });
+
+        producerBuilder.Flush(TimeSpan.FromSeconds(10));
+    }
 }

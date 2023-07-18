@@ -1,0 +1,23 @@
+@model AnalyticService.ViewModels.AnalyticsViewModel
+
+<form method="post" asp-action="GetAnalytics" asp-controller="Analytic" enctype="multipart/form-data">
+    <label>Start date:</label>
+    <input asp-for="@Model.StartDate">
+
+    <label>Finish date:</label>
+    <input asp-for="@Model.FinishDate">
+
+    <input style="margin: 5px" class="btn mx-2 w-60 bg-success" value="Показать аналитику" type="submit"/>
+</form>
+@if (Model.StartDate!.Length > 0 && Model.FinishDate is null)
+{
+    <label>Самая дорогая задача @Model.StartDate : @Model.MostExpensiveTaskForDay</label>
+}
+
+@if (Model.FinishDate is not null)
+{
+    if(Model.StartDate.Length > 0 && Model.FinishDate!.Length > 0)
+    {
+    <label>Самая дорогая задача за период @Model.StartDate - @Model.FinishDate : @Model.MostExpensiveTaskForPeriod</label>
+    }
+}

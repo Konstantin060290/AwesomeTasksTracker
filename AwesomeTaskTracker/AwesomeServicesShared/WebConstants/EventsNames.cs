@@ -21,4 +21,8 @@ public static class EventsNames
     public const string MoneyWrittenOff = "MoneyWrittenOff";
     
     public const string MoneyAccrued = "MoneyAccrued";
+    
+    public const string AnalyticWasRequested = "AnalyticWasRequested";
+    
+    public const string AnalyticWasGiven = "AnalyticWasGiven";
 }

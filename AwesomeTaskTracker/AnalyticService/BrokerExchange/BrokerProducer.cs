@@ -28,4 +28,26 @@ public class BrokerProducer
 
         producerBuilder.Flush(TimeSpan.FromSeconds(10));
     }
+    
+    public async Task SendAnalyticRequest(string userMail, DateTime startDate, DateTime endDate, string eventName)
+    {
+        var userAuthentification = new AnalyticRequest()
+        {
+            UserEmail = userMail,
+            StartDate = startDate,
+            EndDate = endDate
+        };
+
+        var newAuthMessage = JsonSerializer.Serialize(userAuthentification);
+
+        var producerBuilder = ProducerCommon.BuildProducer();
+        
+        await producerBuilder.ProduceAsync(KafkaTopicNames.AnalyticRequests, new Message<string, string>
+        {
+            Key = eventName,
+            Value = newAuthMessage
+        });
+
+        producerBuilder.Flush(TimeSpan.FromSeconds(10));
+    }
 }

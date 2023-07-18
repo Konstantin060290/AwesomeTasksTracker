@@ -16,6 +16,7 @@ builder.Services.AddScoped<IPriceRequestsConsumer, PriceRequestsRequestsConsumer
 builder.Services.AddScoped<IUserConsumer, UserConsumer>();
 builder.Services.AddScoped<ITransactionsConsumer, TransactionsConsumer>();
 builder.Services.AddScoped<IMoneyWorker, MoneyWorker>();
+builder.Services.AddScoped<IAnalyticRequestsConsumer, AnalyticRequestsConsumer>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 
 var app = builder.Build();
@@ -39,6 +40,7 @@ var scope = app.Services.CreateScope();
 scope.ServiceProvider.GetService<IPriceRequestsConsumer>();
 scope.ServiceProvider.GetService<IUserConsumer>();
 scope.ServiceProvider.GetService<ITransactionsConsumer>();
+scope.ServiceProvider.GetService<IAnalyticRequestsConsumer>();
 scope.ServiceProvider.GetService<IMoneyWorker>();
 
 app.MapControllerRoute(

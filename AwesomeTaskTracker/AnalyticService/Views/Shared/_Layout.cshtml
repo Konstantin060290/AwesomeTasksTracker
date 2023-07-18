@@ -42,9 +42,9 @@
                                     <input type="submit" value="Выйти, @userEmail"/>
                                 </form>
                             </li>
-                            @* <li class="nav-item"> *@
-                            @*     <a class="btn btn-primary mx-2" asp-route-email="@userEmail" asp-controller="Bills" asp-action="ManageBills">Управление счетами</a> *@
-                            @* </li> *@
+                            <li class="nav-item">
+                                <a class="btn btn-primary mx-2" asp-route-email="@userEmail" asp-controller="Analytic" asp-action="GetAnalytics">Показать аналитику</a>
+                            </li>
                         </ul>
                     }
                     else
